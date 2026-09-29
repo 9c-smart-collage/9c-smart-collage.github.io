@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart College - Grade 9C Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <div id="pinModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-slate-100 text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
+            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-5 text-2xl shadow-inner">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Smart College Grade 9C</h2>
+            <p class="text-sm text-slate-500 mb-6">Please put your PIN tied to your account. If forgotten or need one contact admin.</p>
+            
+            <form id="pinForm" onsubmit="handlePinLogin(event)" class="space-y-4">
+                <div>
+                    <input type="password" id="pinInput" required placeholder="Enter your PIN" 
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-center tracking-widest font-mono text-lg bg-slate-50">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition duration-200 shadow-lg shadow-blue-600/25 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Enter Portal
+                </button>
+            </form>
+            <div id="pinError" class="mt-4 text-rose-500 text-sm hidden font-medium"></div>
+        </div>
+    </div>
+
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md">
+                    9C
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-slate-900 leading-tight">Smart College</h1>
+                    <p class="text-xs text-blue-600 font-semibold tracking-wide uppercase">Grade 9C • Tyre, Lebanon</p>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center gap-6">
+                <nav class="flex items-center gap-1">
+                    <a href="#announcements" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition">Announcements</a>
+                    <a href="#homework" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition">Homework</a>
+                    <a href="#timetable" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition">Timetable</a>
+                    <a href="#yearbook" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition">Yearbook</a>
+                    <a href="#babyphotos" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition">Childhood</a>
+                    <a href="#wall" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition">Class Wall</a>
+                    <a href="#ai-tutor" class="px-3.5 py-2 rounded-lg text-sm font-medium text-purple-600 hover:bg-purple-50 transition flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Tutor</a>
+                </nav>
+
+                <div class="flex items-center gap-3 pl-4 border-l border-slate-200">
+                    <div id="userInfoBadge" class="text-right hidden">
+                        <div id="userNameDisplay" class="text-xs font-bold text-slate-900"></div>
+                        <div id="userRoleDisplay" class="text-[10px] text-blue-600 font-semibold"></div>
+                    </div>
+                    <button id="adminNavBtn" onclick="openAdminModal()" class="hidden bg-purple-100 hover:bg-purple-200 text-purple-700 px-3.5 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved"></i> Admin Panel
+                    </button>
+                    <button onclick="logout()" class="bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 px-3.5 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2" title="Log Out">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center gap-2">
+                <button onclick="logout()" class="px-3 py-2 bg-slate-100 text-slate-600 hover:text-rose-600 rounded-xl text-sm font-semibold flex items-center gap-1"><i class="fa-solid fa-right-from-bracket"></i></button>
+                <button onclick="toggleMobileMenu()" class="p-2 text-slate-600"><i class="fa-solid fa-bars text-xl"></i></button>
+            </div>
+        </div>
+
+        <!-- Mobile dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
+            <a href="#announcements" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50">Announcements</a>
+            <a href="#homework" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50">Homework</a>
+            <a href="#timetable" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50">Timetable</a>
+            <a href="#yearbook" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50">Yearbook</a>
+            <a href="#babyphotos" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50">Childhood</a>
+            <a href="#wall" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50">Class Wall</a>
+            <a href="#ai-tutor" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm font-medium text-purple-600 hover:bg-purple-50">AI Tutor</a>
+            <div id="mobileAdminContainer" class="pt-2 border-t border-slate-100 hidden">
+                <button onclick="openAdminModal(); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-purple-700 bg-purple-50">Admin Panel & Logbook</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 text-white py-20 px-4 overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto relative z-10 text-center">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-400/30 mb-6">
+                <i class="fa-solid fa-graduation-cap"></i> Smart College Academic Year 2025-2026
+            </span>
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6">
+                Welcome to <span class="bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">Grade 9C</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-lg sm:text-xl text-slate-300 mb-8 font-light">
+                Our official class portal for announcements, homework tracking, schedules, and cherished memories. Built by students, for students.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#homework" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3.5 rounded-xl transition shadow-lg shadow-blue-900/50 flex items-center gap-2">
+                    <i class="fa-solid fa-book-open"></i> Check Homework
+                </a>
+                <a href="#ai-tutor" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold px-6 py-3.5 rounded-xl transition backdrop-blur-md flex items-center gap-2">
+                    <i class="fa-solid fa-robot"></i> Ask AI Tutor
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20 flex-grow w-full">
+
+        <!-- ANNOUNCEMENTS SECTION -->
+        <section id="announcements" class="scroll-mt-28">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-bullhorn text-blue-600"></i> Class Announcements
+                    </h2>
+                    <p class="text-sm text-slate-500">Important updates from teachers and class reps</p>
+                </div>
+                <button onclick="openAddModal('announcement')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition shadow-md shadow-blue-600/20 flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Post Announcement
+                </button>
+            </div>
+            <div id="announcementsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- HOMEWORK SECTION -->
+        <section id="homework" class="scroll-mt-28">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-book-bookmark text-indigo-600"></i> Homework Tracker
+                    </h2>
+                    <p class="text-sm text-slate-500">Keep track of upcoming assignments and due dates</p>
+                </div>
+                <button onclick="openAddModal('homework')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition shadow-md shadow-indigo-600/20 flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Add Homework
+                </button>
+            </div>
+            <div id="homeworkGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- TIMETABLE SECTION -->
+        <section id="timetable" class="scroll-mt-28">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-days text-blue-600"></i> Weekly Timetable
+                    </h2>
+                    <p class="text-sm text-slate-500">Grade 9C daily class periods and subjects</p>
+                </div>
+                <button onclick="openAddModal('timetable')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition shadow-md shadow-blue-600/20 flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Add Period
+                </button>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                <th class="py-4 px-6">Day</th>
+                                <th class="py-4 px-6">Period / Subject</th>
+                                <th class="py-4 px-6">Time</th>
+                                <th class="py-4 px-6 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timetableBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Dynamically populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- YEARBOOK & CHILDHOOD MEMORIES -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Yearbook Section -->
+            <section id="yearbook" class="scroll-mt-28">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-camera-retro text-amber-600"></i> Yearbook Portraits
+                        </h2>
+                        <p class="text-sm text-slate-500">Grade 9C student photos</p>
+                    </div>
+                    <button onclick="openAddModal('yearbook')" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition shadow-md shadow-amber-600/20 flex items-center gap-2">
+                        <i class="fa-solid fa-upload"></i> Upload Portrait
+                    </button>
+                </div>
+                <div id="yearbookGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <!-- Dynamically populated -->
+                </div>
+            </section>
+
+            <!-- Childhood Photos Section -->
+            <section id="babyphotos" class="scroll-mt-28">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-baby text-pink-600"></i> Childhood Photos
+                        </h2>
+                        <p class="text-sm text-slate-500">Guess who! Our younger days</p>
+                    </div>
+                    <button onclick="openAddModal('baby')" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition shadow-md shadow-pink-600/20 flex items-center gap-2">
+                        <i class="fa-solid fa-upload"></i> Upload Baby Photo
+                    </button>
+                </div>
+                <div id="babyGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <!-- Dynamically populated -->
+                </div>
+            </section>
+        </div>
+
+        <!-- CLASS WALL SECTION -->
+        <section id="wall" class="scroll-mt-28">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-comments text-indigo-600"></i> Class Wall & Notes
+                    </h2>
+                    <p class="text-sm text-slate-500">Leave a note or shoutout for your classmates</p>
+                </div>
+                <button onclick="openAddModal('wall')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition shadow-md shadow-indigo-600/20 flex items-center gap-2">
+                    <i class="fa-solid fa-pen"></i> Post Note
+                </button>
+            </div>
+            <div id="wallGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- AI STUDY TUTOR & QUIZ GENERATOR -->
+        <section id="ai-tutor" class="scroll-mt-28 bg-gradient-to-br from-indigo-900 via-slate-900 to-purple-950 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="max-w-3xl mx-auto relative z-10">
+                <div class="text-center mb-10">
+                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-400/30 mb-4">
+                        <i class="fa-solid fa-sparkles"></i> Powered by Gemini AI
+                    </span>
+                    <h2 class="text-3xl font-bold mb-3">Grade 9C AI Study Buddy</h2>
+                    <p class="text-slate-300 text-sm">Ask any question about Math, Science, History, or generate instant practice quizzes for your exams!</p>
+                </div>
+
+                <!-- Tabs -->
+                <div class="flex justify-center gap-2 mb-6">
+                    <button onclick="switchAiTab('chat')" id="aiTabChatBtn" class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-purple-600 text-white transition shadow">AI Tutor Chat</button>
+                    <button onclick="switchAiTab('quiz')" id="aiTabQuizBtn" class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-white/10 text-slate-300 hover:bg-white/20 transition">Quiz Generator</button>
+                </div>
+
+                <!-- Chat Pane -->
+                <div id="aiChatPane" class="space-y-4">
+                    <div id="aiChatMessages" class="bg-slate-950/50 border border-slate-800 rounded-2xl p-4 h-80 overflow-y-auto space-y-3 text-sm">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-robot text-xs"></i></div>
+                            <div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-200">Hello Grade 9C! I'm your AI tutor. Ask me to explain any difficult concept or homework problem!</div>
+                        </div>
+                    </div>
+                    <form onsubmit="handleAiChat(event)" class="flex gap-2">
+                        <input type="text" id="aiChatInput" placeholder="e.g., Explain Newton's Third Law or solve quadratic equations..." class="flex-grow px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm">
+                        <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-6 py-3 rounded-xl transition text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> Ask
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Quiz Pane -->
+                <div id="aiQuizPane" class="hidden space-y-4">
+                    <div class="bg-slate-950/50 border border-slate-800 rounded-2xl p-6">
+                        <div id="quizContainer">
+                            <h3 class="text-lg font-bold mb-4">Generate an Instant Practice Quiz</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                                <button onclick="generateQuiz('Mathematics')" class="bg-slate-800 hover:bg-purple-600/30 border border-slate-700 p-3 rounded-xl text-sm font-semibold transition text-left">📐 Mathematics</button>
+                                <button onclick="generateQuiz('Physics')" class="bg-slate-800 hover:bg-purple-600/30 border border-slate-700 p-3 rounded-xl text-sm font-semibold transition text-left">⚡ Physics</button>
+                                <button onclick="generateQuiz('Chemistry')" class="bg-slate-800 hover:bg-purple-600/30 border border-slate-700 p-3 rounded-xl text-sm font-semibold transition text-left">🧪 Chemistry</button>
+                            </div>
+                        </div>
+                        <div id="quizOutput" class="text-sm text-slate-300"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-8 px-4 mt-auto">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+            <div>© 2026 Smart College • Grade 9C, Tyre, Lebanon. All rights reserved.</div>
+            <div class="flex items-center gap-4">
+                <span class="text-xs font-mono text-slate-400" id="footerUserStatus">Logged in</span>
+            </div>
+        </div>
+    </footer>
+
+    <div id="adminModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 sm:p-8 border border-slate-100 max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-purple-600"></i> Master Admin Control & Audit Logbook
+                    </h3>
+                    <p class="text-xs text-slate-500">Manage student PINs and review all edits made across the portal</p>
+                </div>
+                <button onclick="closeAdminModal()" class="text-slate-400 hover:text-slate-600 text-lg p-2"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-grow overflow-hidden">
+                <!-- Left: PIN Manager -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col">
+                    <h4 class="font-bold text-sm text-slate-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-key"></i> Student PIN Manager</h4>
+                    <form onsubmit="handleAddPin(event)" class="space-y-3 mb-4">
+                        <input type="text" id="newPinCode" required placeholder="PIN (e.g., 9c-31)" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm">
+                        <input type="text" id="newPinName" required placeholder="Student Full Name" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm">
+                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg text-xs transition">Add New PIN</button>
+                    </form>
+                    <div class="overflow-y-auto flex-grow space-y-2 pr-1" id="pinListContainer">
+                        <!-- Dynamically populated PINs -->
+                    </div>
+                </div>
+
+                <!-- Right: Audit Logbook -->
+                <div class="md:col-span-2 bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="font-bold text-sm text-slate-800 flex items-center gap-2"><i class="fa-solid fa-book-tanakh"></i> Real-Time Audit Logbook</h4>
+                        <button onclick="clearLogs()" class="text-xs text-rose-600 hover:underline">Clear Logs</button>
+                    </div>
+                    <div class="overflow-y-auto flex-grow space-y-2.5 pr-1 font-mono text-xs" id="auditLogContainer">
+                        <!-- Dynamically populated logs -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="addModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-100">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+                <h3 id="modalTitle" class="text-xl font-bold text-slate-900">Add Item</h3>
+                <button onclick="closeAddModal()" class="text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="genericAddForm" onsubmit="handleGenericSubmit(event)" class="space-y-4">
+                <div id="modalFormFields">
+                    <!-- Dynamic inputs injected here -->
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition text-sm">Save & Post</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Default Student & Admin PIN Database (Zero hints displayed in UI)
+        let studentPins = JSON.parse(localStorage.getItem('grade9c_pins')) || {
+            "overrideadmin9c": { name: "Master Administrator", isAdmin: true },
+            "9c-01": { name: "Ali Hammoud", isAdmin: false },
+            "9c-02": { name: "Fatima Zein", isAdmin: false },
+            "9c-03": { name: "Karim Mroueh", isAdmin: false },
+            "9c-04": { name: "Nour Bitar", isAdmin: false },
+            "9c-05": { name: "Hassan Fakih", isAdmin: false }
+        };
+
+        let currentUser = JSON.parse(localStorage.getItem('grade9c_current_user')) || null;
+        let auditLogs = JSON.parse(localStorage.getItem('grade9c_logs')) || [
+            { time: new Date().toLocaleTimeString(), user: "System", action: "Portal initialized successfully." }
+        ];
+
+        // Content States
+        let announcements = JSON.parse(localStorage.getItem('grade9c_announcements')) || [
+            { id: 1, title: "Mid-Term Exam Schedule", content: "Check the calendar for upcoming math and physics midterms next week.", author: "Ali Hammoud", date: "Sep 28, 2026", image: "" }
+        ];
+        let homework = JSON.parse(localStorage.getItem('grade9c_homework')) || [
+            { id: 1, subject: "Mathematics", task: "Solve exercises 4 to 10 on page 112.", dueDate: "Oct 2, 2026", author: "Karim Mroueh", image: "" }
+        ];
+        let timetable = JSON.parse(localStorage.getItem('grade9c_timetable')) || [
+            { id: 1, day: "Monday", subject: "Mathematics", time: "08:00 AM - 08:50 AM" },
+            { id: 2, day: "Monday", subject: "Physics", time: "09:00 AM - 09:50 AM" },
+            { id: 3, day: "Tuesday", subject: "Chemistry", time: "08:00 AM - 08:50 AM" },
+            { id: 4, day: "Wednesday", subject: "English Literature", time: "08:00 AM - 08:50 AM" }
+        ];
+        let yearbook = JSON.parse(localStorage.getItem('grade9c_yearbook')) || [
+            { id: 1, name: "Ali Hammoud", url: "https://placehold.co/400x400/2563eb/ffffff?text=Ali+Hammoud" }
+        ];
+        let babyPhotos = JSON.parse(localStorage.getItem('grade9c_baby')) || [
+            { id: 1, name: "Fatima Zein", url: "https://placehold.co/400x400/db2777/ffffff?text=Baby+Fatima" }
+        ];
+        let wallNotes = JSON.parse(localStorage.getItem('grade9c_wall')) || [
+            { id: 1, name: "Hassan Fakih", text: "Great luck to everyone on our upcoming exams!", time: "Today" }
+        ];
+
+        let activeModalType = '';
+
+        window.onload = function() {
+            if (!currentUser) {
+                document.getElementById('pinModal').classList.remove('hidden');
+                document.getElementById('pinModal').classList.add('flex');
+            } else {
+                applyLoginState();
+            }
+            renderAll();
+        };
+
+        function handlePinLogin(e) {
+            e.preventDefault();
+            const pin = document.getElementById('pinInput').value.trim();
+            const errorEl = document.getElementById('pinError');
+            
+            if (studentPins[pin]) {
+                currentUser = { pin, ...studentPins[pin] };
+                localStorage.setItem('grade9c_current_user', JSON.stringify(currentUser));
+                document.getElementById('pinModal').classList.remove('flex');
+                document.getElementById('pinModal').classList.add('hidden');
+                logAction(`Logged in as ${currentUser.name}`);
+                applyLoginState();
+                renderAll();
+            } else {
+                errorEl.textContent = "Invalid PIN. Please check your assigned PIN or contact admin.";
+                errorEl.classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('grade9c_current_user');
+            document.getElementById('pinInput').value = '';
+            document.getElementById('pinModal').classList.remove('hidden');
+            document.getElementById('pinModal').classList.add('flex');
+            applyLoginState();
+        }
+
+        function applyLoginState() {
+            if (!currentUser) return;
+            document.getElementById('userInfoBadge').classList.remove('hidden');
+            document.getElementById('userNameDisplay').textContent = currentUser.name;
+            document.getElementById('userRoleDisplay').textContent = currentUser.isAdmin ? "Master Administrator" : "Grade 9C Student";
+            document.getElementById('footerUserStatus').textContent = `Logged in as: ${currentUser.name}`;
+
+            if (currentUser.isAdmin) {
+                document.getElementById('adminNavBtn').classList.remove('hidden');
+                document.getElementById('mobileAdminContainer').classList.remove('hidden');
+            } else {
+                document.getElementById('adminNavBtn').classList.add('hidden');
+                document.getElementById('mobileAdminContainer').classList.add('hidden');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function logAction(actionDesc) {
+            const entry = {
+                time: new Date().toLocaleTimeString() + ' ' + new Date().toLocaleDateString(),
+                user: currentUser ? currentUser.name : "Guest",
+                action: actionDesc
+            };
+            auditLogs.unshift(entry);
+            localStorage.setItem('grade9c_logs', JSON.stringify(auditLogs));
+        }
+
+        // Render All Sections
+        function renderAll() {
+            renderAnnouncements();
+            renderHomework();
+            renderTimetable();
+            renderYearbook();
+            renderBabyPhotos();
+            renderWall();
+            renderAdminPanel();
+        }
+
+        function renderAnnouncements() {
+            const grid = document.getElementById('announcementsGrid');
+            grid.innerHTML = announcements.map(item => `
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-600">${item.date}</span>
+                            ${currentUser ? `<button onclick="deleteItem('announcements', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">${item.title}</h3>
+                        <p class="text-slate-600 text-sm mb-4 leading-relaxed">${item.content}</p>
+                        ${item.image ? `<img src="${item.image}" class="rounded-xl w-full h-48 object-cover mb-4" onerror="this.src='https://placehold.co/400x200/e2e8f0/475569?text=Image'">` : ''}
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
+                        <span>Posted by <strong class="text-slate-700">${item.author}</strong></span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderHomework() {
+            const grid = document.getElementById('homeworkGrid');
+            grid.innerHTML = homework.map(item => `
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600">${item.subject}</span>
+                            ${currentUser ? `<button onclick="deleteItem('homework', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </div>
+                        <p class="text-slate-800 font-medium text-sm mb-4 leading-relaxed">${item.task}</p>
+                        ${item.image ? `<img src="${item.image}" class="rounded-xl w-full h-48 object-cover mb-4" onerror="this.src='https://placehold.co/400x200/e2e8f0/475569?text=Image'">` : ''}
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
+                        <span class="font-semibold text-rose-600"><i class="fa-regular fa-clock"></i> Due: ${item.dueDate}</span>
+                        <span>By ${item.author}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTimetable() {
+            const tbody = document.getElementById('timetableBody');
+            tbody.innerHTML = timetable.map(item => `
+                <tr class="hover:bg-slate-50/50 transition">
+                    <td class="py-4 px-6 font-semibold text-slate-900">${item.day}</td>
+                    <td class="py-4 px-6 text-slate-700">${item.subject}</td>
+                    <td class="py-4 px-6 text-slate-500 font-mono text-xs">${item.time}</td>
+                    <td class="py-4 px-6 text-right">
+                        ${currentUser ? `<button onclick="deleteItem('timetable', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderYearbook() {
+            const grid = document.getElementById('yearbookGrid');
+            grid.innerHTML = yearbook.map(item => `
+                <div class="relative group bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm aspect-square">
+                    <img src="${item.url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x400/e2e8f0/475569?text=Portrait'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4 text-white">
+                        <p class="font-bold text-sm">${item.name}</p>
+                        ${currentUser ? `<button onclick="deleteItem('yearbook', ${item.id})" class="text-xs text-rose-300 hover:text-rose-100 mt-1 text-left">Delete</button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderBabyPhotos() {
+            const grid = document.getElementById('babyGrid');
+            grid.innerHTML = babyPhotos.map(item => `
+                <div class="relative group bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm aspect-square">
+                    <img src="${item.url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x400/e2e8f0/475569?text=Baby'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4 text-white">
+                        <p class="font-bold text-sm">Baby: ${item.name}</p>
+                        ${currentUser ? `<button onclick="deleteItem('baby', ${item.id})" class="text-xs text-rose-300 hover:text-rose-100 mt-1 text-left">Delete</button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderWall() {
+            const grid = document.getElementById('wallGrid');
+            grid.innerHTML = wallNotes.map(item => `
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-bold text-slate-900 text-sm">${item.name}</span>
+                            ${currentUser ? `<button onclick="deleteItem('wall', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </div>
+                        <p class="text-slate-600 text-sm leading-relaxed">${item.text}</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 text-[10px] text-slate-400">
+                        ${item.time}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAdminPanel() {
+            const pinList = document.getElementById('pinListContainer');
+            pinList.innerHTML = Object.entries(studentPins).map(([pin, data]) => `
+                <div class="bg-white p-2.5 rounded-lg border border-slate-200 flex items-center justify-between text-xs">
+                    <div>
+                        <span class="font-mono font-bold text-purple-700">${pin}</span>
+                        <div class="text-slate-600 font-medium">${data.name}</div>
+                    </div>
+                    ${pin !== 'overrideadmin9c' ? `<button onclick="deletePin('${pin}')" class="text-rose-500 hover:underline">Remove</button>` : '<span class="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded">Admin</span>'}
+                </div>
+            `).join('');
+
+            const logContainer = document.getElementById('auditLogContainer');
+            logContainer.innerHTML = auditLogs.map(log => `
+                <div class="p-2 bg-white rounded border border-slate-200">
+                    <div class="text-[10px] text-slate-400">${log.time} - <strong class="text-purple-600">${log.user}</strong></div>
+                    <div class="text-slate-700 mt-0.5">${log.action}</div>
+                </div>
+            `).join('');
+        }
+
+        // Modals & Submissions
+        function openAddModal(type) {
+            activeModalType = type;
+            const modal = document.getElementById('addModal');
+            const title = document.getElementById('modalTitle');
+            const fields = document.getElementById('modalFormFields');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            if (type === 'announcement') {
+                title.textContent = "Post Announcement";
+                fields.innerHTML = `
+                    <input type="text" id="annTitle" required placeholder="Announcement Title" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+                    <textarea id="annContent" required placeholder="Write details here..." rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm"></textarea>
+                    <input type="url" id="annImage" placeholder="Optional Image URL (https://...)" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+                `;
+            } else if (type === 'homework') {
+                title.textContent = "Add Homework Assignment";
+                fields.innerHTML = `
+                    <input type="text" id="hwSubject" required placeholder="Subject (e.g., Mathematics)" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+                    <textarea id="hwTask" required placeholder="Assignment description..." rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm"></textarea>
+                    <input type="text" id="hwDue" required placeholder="Due Date (e.g., Oct 5, 2026)" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+                    <input type="url" id="hwImage" placeholder="Optional Image URL (https://...)" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+                `;
+            } else if (type === 'timetable') {
+                title.textContent = "Add Timetable Period";
+                fields.innerHTML = `
+                    <select id="ttDay" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+                        <option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option>
+                    </select>
+                    <input type="text" id="ttSubject" required placeholder="Subject Name" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+                    <input type="text" id="ttTime" required placeholder="Time (e.g., 08:00 AM - 08:50 AM)" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+                `;
+            } else if (type === 'yearbook') {
+                title.textContent = "Upload Yearbook Portrait";
+                fields.innerHTML = `
+                    <input type="text" id="ybName" required placeholder="Student Full Name" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+                    <input type="url" id="ybUrl" required placeholder="Photo Image URL (https://...)" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+                `;
+            } else if (type === 'baby') {
+                title.textContent = "Upload Childhood Photo";
+                fields.innerHTML = `
+                    <input type="text" id="babyName" required placeholder="Student Name" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+                    <input type="url" id="babyUrl" required placeholder="Photo Image URL (https://...)" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm">
+                `;
+            } else if (type === 'wall') {
+                title.textContent = "Post Note to Class Wall";
+                fields.innerHTML = `
+                    <textarea id="wallText" required placeholder="Write your note or shoutout..." rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm"></textarea>
+                `;
+            }
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.remove('flex');
+            document.getElementById('addModal').classList.add('hidden');
+        }
+
+        function handleGenericSubmit(e) {
+            e.preventDefault();
+            const id = Date.now();
+            const author = currentUser ? currentUser.name : "Student";
+
+            if (activeModalType === 'announcement') {
+                const title = document.getElementById('annTitle').value;
+                const content = document.getElementById('annContent').value;
+                const image = document.getElementById('annImage').value;
+                announcements.unshift({ id, title, content, author, date: new Date().toLocaleDateString(), image });
+                localStorage.setItem('grade9c_announcements', JSON.stringify(announcements));
+                logAction(`Posted announcement: "${title}"`);
+            } else if (activeModalType === 'homework') {
+                const subject = document.getElementById('hwSubject').value;
+                const task = document.getElementById('hwTask').value;
+                const dueDate = document.getElementById('hwDue').value;
+                const image = document.getElementById('hwImage').value;
+                homework.unshift({ id, subject, task, dueDate, author, image });
+                localStorage.setItem('grade9c_homework', JSON.stringify(homework));
+                logAction(`Added homework for ${subject}`);
+            } else if (activeModalType === 'timetable') {
+                const day = document.getElementById('ttDay').value;
+                const subject = document.getElementById('ttSubject').value;
+                const time = document.getElementById('ttTime').value;
+                timetable.push({ id, day, subject, time });
+                localStorage.setItem('grade9c_timetable', JSON.stringify(timetable));
+                logAction(`Added timetable period: ${subject} (${day})`);
+            } else if (activeModalType === 'yearbook') {
+                const name = document.getElementById('ybName').value;
+                const url = document.getElementById('ybUrl').value;
+                yearbook.push({ id, name, url });
+                localStorage.setItem('grade9c_yearbook', JSON.stringify(yearbook));
+                logAction(`Uploaded yearbook portrait for ${name}`);
+            } else if (activeModalType === 'baby') {
+                const name = document.getElementById('babyName').value;
+                const url = document.getElementById('babyUrl').value;
+                babyPhotos.push({ id, name, url });
+                localStorage.setItem('grade9c_baby', JSON.stringify(babyPhotos));
+                logAction(`Uploaded childhood photo for ${name}`);
+            } else if (activeModalType === 'wall') {
+                const text = document.getElementById('wallText').value;
+                wallNotes.unshift({ id, name: author, text, time: "Just now" });
+                localStorage.setItem('grade9c_wall', JSON.stringify(wallNotes));
+                logAction(`Posted note to Class Wall`);
+            }
+
+            closeAddModal();
+            renderAll();
+        }
+
+        function deleteItem(type, id) {
+            if (type === 'announcements') {
+                announcements = announcements.filter(i => i.id !== id);
+                localStorage.setItem('grade9c_announcements', JSON.stringify(announcements));
+            } else if (type === 'homework') {
+                homework = homework.filter(i => i.id !== id);
+                localStorage.setItem('grade9c_homework', JSON.stringify(homework));
+            } else if (type === 'timetable') {
+                timetable = timetable.filter(i => i.id !== id);
+                localStorage.setItem('grade9c_timetable', JSON.stringify(timetable));
+            } else if (type === 'yearbook') {
+                yearbook = yearbook.filter(i => i.id !== id);
+                localStorage.setItem('grade9c_yearbook', JSON.stringify(yearbook));
+            } else if (type === 'baby') {
+                babyPhotos = babyPhotos.filter(i => i.id !== id);
+                localStorage.setItem('grade9c_baby', JSON.stringify(babyPhotos));
+            } else if (type === 'wall') {
+                wallNotes = wallNotes.filter(i => i.id !== id);
+                localStorage.setItem('grade9c_wall', JSON.stringify(wallNotes));
+            }
+            logAction(`Deleted item from ${type}`);
+            renderAll();
+        }
+
+        // Admin Modal Controls
+        function openAdminModal() {
+            if (!currentUser || !currentUser.isAdmin) {
+                alert("Access Denied: Only Master Admin can access this panel.");
+                return;
+            }
+            document.getElementById('adminModal').classList.remove('hidden');
+            document.getElementById('adminModal').classList.add('flex');
+            renderAdminPanel();
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('flex');
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        function handleAddPin(e) {
+            e.preventDefault();
+            const pin = document.getElementById('newPinCode').value.trim();
+            const name = document.getElementById('newPinName').value.trim();
+            if (studentPins[pin]) {
+                alert("PIN already exists!");
+                return;
+            }
+            studentPins[pin] = { name, isAdmin: false };
+            localStorage.setItem('grade9c_pins', JSON.stringify(studentPins));
+            logAction(`Created student PIN for ${name} (${pin})`);
+            document.getElementById('newPinCode').value = '';
+            document.getElementById('newPinName').value = '';
+            renderAdminPanel();
+        }
+
+        function deletePin(pin) {
+            delete studentPins[pin];
+            localStorage.setItem('grade9c_pins', JSON.stringify(studentPins));
+            logAction(`Removed student PIN: ${pin}`);
+            renderAdminPanel();
+        }
+
+        function clearLogs() {
+            auditLogs = [];
+            localStorage.setItem('grade9c_logs', JSON.stringify(auditLogs));
+            renderAdminPanel();
+        }
+
+        // AI Tutor & Quiz Generator using Gemini API
+        function switchAiTab(tab) {
+            const chatPane = document.getElementById('aiChatPane');
+            const quizPane = document.getElementById('aiQuizPane');
+            const chatBtn = document.getElementById('aiTabChatBtn');
+            const quizBtn = document.getElementById('aiTabQuizBtn');
+
+            if (tab === 'chat') {
+                chatPane.classList.remove('hidden');
+                quizPane.classList.add('hidden');
+                chatBtn.className = "px-5 py-2.5 rounded-xl text-sm font-semibold bg-purple-600 text-white transition shadow";
+                quizBtn.className = "px-5 py-2.5 rounded-xl text-sm font-semibold bg-white/10 text-slate-300 hover:bg-white/20 transition";
+            } else {
+                chatPane.classList.add('hidden');
+                quizPane.classList.remove('hidden');
+                quizBtn.className = "px-5 py-2.5 rounded-xl text-sm font-semibold bg-purple-600 text-white transition shadow";
+                chatBtn.className = "px-5 py-2.5 rounded-xl text-sm font-semibold bg-white/10 text-slate-300 hover:bg-white/20 transition";
+            }
+        }
+
+        async function handleAiChat(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById('aiChatInput');
+            const prompt = inputEl.value.trim();
+            if (!prompt) return;
+
+            const chatMessages = document.getElementById('aiChatMessages');
+            chatMessages.innerHTML += `
+                <div class="flex items-start gap-3 justify-end">
+                    <div class="bg-purple-600 p-3 rounded-2xl rounded-tr-none text-white">${prompt}</div>
+                </div>
+            `;
+            inputEl.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            const loadingId = 'loading_' + Date.now();
+            chatMessages.innerHTML += `
+                <div id="${loadingId}" class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-robot text-xs"></i></div>
+                    <div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-300 animate-pulse">Thinking...</div>
+                </div>
+            `;
+
+            try {
+                const systemPrompt = "You are a helpful, encouraging AI study tutor for Grade 9C students at Smart College. Explain concepts clearly and simply.";
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
+                });
+
+                const result = await response.json();
+                const reply = result.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, I couldn't process that question right now.";
+                
+                document.getElementById(loadingId).remove();
+                chatMessages.innerHTML += `
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-robot text-xs"></i></div>
+                        <div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-200 leading-relaxed">${reply}</div>
+                    </div>
+                `;
+            } catch (err) {
+                document.getElementById(loadingId).remove();
+                chatMessages.innerHTML += `
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-rose-600 flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-triangle-exclamation text-xs"></i></div>
+                        <div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-rose-300">Error connecting to AI tutor. Please try again.</div>
+                    </div>
+                `;
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function generateQuiz(subject) {
+            const outputEl = document.getElementById('quizOutput');
+            outputEl.innerHTML = `<div class="text-purple-300 animate-pulse py-4">Generating a 3-question practice quiz for ${subject}...</div>`;
+
+            try {
+                const systemPrompt = "Generate 3 multiple choice practice quiz questions for Grade 9C " + subject + " with questions, options A,B,C,D, and the correct answer clearly formatted in HTML.";
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Create quiz for ${subject}` }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
+                });
+
+                const result = await response.json();
+                const reply = result.candidates?.[0]?.content?.parts?.[0]?.text || "Could not generate quiz.";
+                outputEl.innerHTML = `<div class="space-y-4 pt-2">${reply}</div>`;
+            } catch (err) {
+                outputEl.innerHTML = `<div class="text-rose-400">Failed to generate quiz. Please try again.</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
