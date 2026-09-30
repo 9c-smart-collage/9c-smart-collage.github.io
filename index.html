@@ -309,8 +309,41 @@ window.closeAdminModal = function() { document.getElementById('adminModal').clas
 window.handleAddPin = function(e) { e.preventDefault(); const pin = document.getElementById('newPinCode').value.trim(); const name = document.getElementById('newPinName').value.trim(); if (studentPins[pin]) { alert("Exists!"); return; } studentPins[pin] = { name, isAdmin: false }; logAction(`Created PIN ${pin}`); saveToCloud(); document.getElementById('newPinCode').value=''; document.getElementById('newPinName').value=''; }
 window.deletePin = function(pin) { delete studentPins[pin]; logAction(`Removed ${pin}`); saveToCloud(); }
 window.clearLogs = function() { auditLogs = []; saveToCloud(); }
-window.handleAiChat = async function(e) { e.preventDefault(); const inputEl = document.getElementById('aiChatInput'); const prompt = inputEl.value.trim(); if (!prompt) return; const chatMessages = document.getElementById('aiChatMessages'); chatMessages.innerHTML += `<div class="flex justify-end"><div class="bg-purple-600 text-white p-3 rounded-2xl rounded-tr-none">${prompt}</div></div>`; inputEl.value=''; chatMessages.innerHTML += `<div class="flex gap-3"><div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-800 text-white p-3 rounded-2xl rounded-tl-none">Your portal is now LIVE SYNC! All data syncs to all phones via Firebase. Add Gemini API key for real AI tutor.</div></div>`; chatMessages.scrollTop = chatMessages.scrollHeight; }
+        // after your other onSnapshot, add:
+onSnapshot(doc(db, "portal", "quizzes"), (snap)=>{
+    if(snap.exists()){ window.quizzes = snap.data().data; localStorage.setItem('quizzes', JSON.stringify(window.quizzes)); window.renderQuizzesForStudents(); }
+});
+window.handleAiChat = async function(e) {
+    e.preventDefault();
+    const inputEl = document.getElementById('aiChatInput');
+    const prompt = inputEl.value.trim();
+    if (!prompt) return;
+    const chatMessages = document.getElementById('aiChatMessages');
+    chatMessages.innerHTML += `<div class="flex justify-end"><div class="bg-purple-600 text-white p-3 rounded-2xl rounded-tr-none text-sm">${prompt}</div></div>`;
+    inputEl.value='';
+    const loadingId = 'loading_' + Date.now();
+    chatMessages.innerHTML += `<div id="${loadingId}" class="flex gap-3"><div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-300 animate-pulse text-sm">Thinking...</div></div>`;
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    try {
+        const apiKey = "AIzaSyDjY7W0lNitZjvwvum59NLvgQGDJPF4FP4";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: "You are a helpful Grade 9C tutor for Smart College Lebanon. Explain clearly." }] } }) });
+        const result = await response.json();
+        const reply = result.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, try again!";
+        document.getElementById(loadingId).remove();
+        chatMessages.innerHTML += `<div class="flex gap-3"><div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-200 text-sm">${reply.replace(/\n/g,'<br>')}</div></div>`;
+    } catch (err) {
+        document.getElementById(loadingId).remove();
+        chatMessages.innerHTML += `<div class="flex gap-3"><div class="w-8 h-8 bg-rose-600 rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-triangle-exclamation text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-rose-300 text-sm">Error: ${err.message}</div></div>`;
+    }
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
 
+initCloudSync();
+if (currentUser) { applyLoginState(); document.getElementById('pinModal').classList.add('hidden'); }
+</script>
+</body>
+</html>
 initCloudSync();
 if (currentUser) { applyLoginState(); document.getElementById('pinModal').classList.add('hidden'); }
 </script>
