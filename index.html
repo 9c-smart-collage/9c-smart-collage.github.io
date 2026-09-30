@@ -884,5 +884,37 @@
             }
         }
     </script>
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+  import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDjY7W0lNitZjvwvum59NLvgQGDJPF4FP4",
+    authDomain: "c-smart-collage.firebaseapp.com",
+    projectId: "c-smart-collage",
+    storageBucket: "c-smart-collage.firebasestorage.app",
+    messagingSenderId: "754290398602",
+    appId: "1:754290398602:web:35dee6868c1f4ad1fca473",
+    measurementId: "G-8BNSX45EBD"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+
+
+        const db = getFirestore(app);
+window.db = db;
+window.doc = doc;
+window.setDoc = setDoc;
+window.onSnapshot = onSnapshot;
+  const analytics = getAnalytics(app);
+</script>
 </body>
 </html>
