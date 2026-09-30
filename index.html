@@ -40,14 +40,16 @@
                 </nav>
                 <div class="flex items-center gap-3 pl-4 border-l border-slate-200">
                     <div id="userInfoBadge" class="text-right hidden"><div id="userNameDisplay" class="text-xs font-bold text-slate-900"></div><div id="userRoleDisplay" class="text-[10px] text-blue-600 font-semibold"></div></div>
+                    <button onclick="openChatModal()" class="bg-sky-600 hover:bg-sky-700 text-white px-3.5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-comments"></i> Live Chat</button>
                     <button id="adminNavBtn" onclick="openAdminModal()" class="hidden bg-purple-100 hover:bg-purple-200 text-purple-700 px-3.5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> Admin</button>
                     <button onclick="logout()" class="bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 px-3.5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
                 </div>
             </div>
-            <div class="md:hidden flex items-center gap-2"><button onclick="logout()" class="px-3 py-2 bg-slate-100 rounded-xl text-sm"><i class="fa-solid fa-right-from-bracket"></i></button><button onclick="toggleMobileMenu()" class="p-2"><i class="fa-solid fa-bars text-xl"></i></button></div>
+            <div class="md:hidden flex items-center gap-2"><button onclick="openChatModal()" class="px-3 py-2 bg-sky-600 text-white rounded-xl text-sm"><i class="fa-solid fa-comments"></i></button><button onclick="logout()" class="px-3 py-2 bg-slate-100 rounded-xl text-sm"><i class="fa-solid fa-right-from-bracket"></i></button><button onclick="toggleMobileMenu()" class="p-2"><i class="fa-solid fa-bars text-xl"></i></button></div>
         </div>
         <div id="mobileMenu" class="hidden md:hidden bg-white border-b px-4 pt-2 pb-4 space-y-2">
             <a href="#announcements" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50">Announcements</a><a href="#homework" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50">Homework</a><a href="#timetable" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50">Timetable</a><a href="#yearbook" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50">Yearbook</a><a href="#babyphotos" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50">Childhood</a><a href="#wall" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50">Class Wall</a><a href="#ai-tutor" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-purple-600">AI Tutor</a>
+            <button onclick="openChatModal(); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-sky-700 bg-sky-50"><i class="fa-solid fa-comments"></i> Live Chat</button>
             <div id="mobileAdminContainer" class="pt-2 border-t hidden"><button onclick="openAdminModal(); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-purple-700 bg-purple-50">Admin Panel & Logbook</button></div>
         </div>
     </header>
@@ -57,7 +59,7 @@
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-400/30 mb-6"><i class="fa-solid fa-graduation-cap"></i> Academic Year 2026-2027</span>
             <h1 class="text-4xl sm:text-6xl font-extrabold mb-6">Welcome to <span class="bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">Grade 9C</span></h1>
             <p class="max-w-2xl mx-auto text-lg text-slate-300 mb-8">Official class portal - live synced to all students phones.</p>
-            <div class="flex flex-wrap justify-center gap-4"><a href="#homework" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3.5 rounded-xl shadow flex items-center gap-2"><i class="fa-solid fa-book-open"></i> Check Homework</a><a href="#ai-tutor" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold px-6 py-3.5 rounded-xl backdrop-blur-md flex items-center gap-2"><i class="fa-solid fa-robot"></i> Ask AI Tutor</a></div>
+            <div class="flex flex-wrap justify-center gap-4"><a href="#homework" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3.5 rounded-xl shadow flex items-center gap-2"><i class="fa-solid fa-book-open"></i> Check Homework</a><a href="#ai-tutor" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold px-6 py-3.5 rounded-xl backdrop-blur-md flex items-center gap-2"><i class="fa-solid fa-robot"></i> Ask AI Tutor</a><button onclick="openChatModal()" class="bg-sky-600 hover:bg-sky-500 text-white font-semibold px-6 py-3.5 rounded-xl shadow flex items-center gap-2"><i class="fa-solid fa-comments"></i> Open Live Chat</button></div>
             <div id="syncStatus" class="mt-4 text-xs bg-black/30 inline-block px-3 py-1 rounded-full">● Connecting live sync...</div>
         </div>
     </section>
@@ -87,10 +89,24 @@
     <div id="adminModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-start justify-center p-4 overflow-y-auto overscroll-contain"><div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8 max-h-[90vh] flex flex-col overflow-hidden"><div class="flex items-center justify-between pb-4 border-b mb-6 shrink-0"><div><h3 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-shield-halved text-purple-600"></i> Admin Control & Audit Logbook</h3></div><button onclick="closeAdminModal()" class="text-slate-400 text-lg p-2"><i class="fa-solid fa-xmark"></i></button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 overflow-hidden min-h-0"><div class="bg-slate-50 p-4 rounded-xl border flex flex-col overflow-hidden min-h-0"><h4 class="font-bold text-sm mb-3 shrink-0"><i class="fa-solid fa-key"></i> PIN Manager</h4><form onsubmit="handleAddPin(event)" class="space-y-3 mb-4 shrink-0"><input type="text" id="newPinCode" required placeholder="PIN (e.g., 9c-31)" class="w-full px-3 py-2 rounded-lg border text-sm"><input type="text" id="newPinName" required placeholder="Student Full Name" class="w-full px-3 py-2 rounded-lg border text-sm"><button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg text-xs">Add New PIN</button></form><div id="pinListContainer" class="overflow-y-auto space-y-2 pr-1 flex-1 min-h-[150px]"></div></div><div class="md:col-span-2 bg-slate-50 p-4 rounded-xl border flex flex-col overflow-hidden min-h-0"><div class="flex justify-between mb-3 shrink-0"><h4 class="font-bold text-sm"><i class="fa-solid fa-book-tanakh"></i> Audit Logbook</h4><button onclick="clearLogs()" class="text-xs text-rose-600">Clear</button></div><div id="auditLogContainer" class="overflow-y-auto space-y-2.5 font-mono text-xs flex-1 min-h-[200px] overscroll-contain"></div></div></div></div></div>
     <div id="addModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4"><div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border"><div class="flex justify-between pb-4 border-b mb-6"><h3 id="modalTitle" class="text-xl font-bold">Add Item</h3><button onclick="closeAddModal()" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button></div><form id="genericAddForm" onsubmit="handleGenericSubmit(event)" class="space-y-4"><div id="modalFormFields"></div><button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl text-sm">Save & Post LIVE</button></form></div></div>
 
+    <div id="chatModal" class="fixed inset-0 z-[60] bg-slate-900/80 backdrop-blur-sm hidden items-start justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full my-8 flex flex-col overflow-hidden max-h-[85vh] border">
+            <div class="flex items-center justify-between p-4 border-b bg-gradient-to-r from-sky-600 to-blue-600 text-white">
+                <h3 class="font-bold flex items-center gap-2"><i class="fa-solid fa-comments"></i> Grade 9C Live Chat <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">LIVE</span></h3>
+                <button onclick="closeChatModal()" class="text-white/80 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="chatMessages" class="p-4 space-y-3 bg-slate-50 flex-1 overflow-y-auto min-h-[400px] max-h-[400px]"></div>
+            <div class="p-3 border-t bg-white flex gap-2">
+                <input id="chatInput" type="text" placeholder="Type a message..." class="flex-1 px-4 py-2.5 rounded-full border border-slate-200 text-sm outline-none focus:border-sky-500 bg-slate-50">
+                <button onclick="sendChatMessage()" class="bg-sky-600 hover:bg-sky-700 text-white w-10 h-10 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-paper-plane text-sm"></i></button>
+            </div>
+            <div class="px-4 py-2 bg-slate-50 text-[10px] text-slate-400 border-t text-center">Messages visible to everyone • Logged in Admin Logbook</div>
+        </div>
+    </div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
-
 const firebaseConfig = {
   apiKey: "AIzaSyDjY7W0lNitZjvwvum59NLvgQGDJPF4FP4",
   authDomain: "c-smart-collage.firebaseapp.com",
@@ -100,17 +116,14 @@ const firebaseConfig = {
   appId: "1:754290398602:web:35dee6868c1f4ad1fca473",
   measurementId: "G-8BNSX45EBD"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 window.db = db; window.doc = doc; window.setDoc = setDoc; window.onSnapshot = onSnapshot;
-
-// LIVE SYNC SYSTEM
 window.initCloudSync = function(){
   const status = document.getElementById('syncStatus');
   if(!db){ status.textContent='● Offline mode'; return; }
   status.textContent='● Live sync active - all phones connected';
-  const collections = ['grade9c_announcements','grade9c_homework','grade9c_timetable','grade9c_yearbook','grade9c_baby','grade9c_wall','grade9c_pins','grade9c_logs'];
+  const collections = ['grade9c_announcements','grade9c_homework','grade9c_timetable','grade9c_yearbook','grade9c_baby','grade9c_wall','grade9c_pins','grade9c_logs','grade9c_chat'];
   collections.forEach(col => {
     onSnapshot(doc(db, "portal", col), (snap)=>{
       if(snap.exists()){
@@ -123,11 +136,11 @@ window.initCloudSync = function(){
         if(col==='grade9c_wall') { wallNotes = snap.data().data; renderWall(); }
         if(col==='grade9c_pins') { studentPins = snap.data().data; renderAdminPanel(); }
         if(col==='grade9c_logs') { auditLogs = snap.data().data; renderAdminPanel(); }
+        if(col==='grade9c_chat') { chatMessagesData = snap.data().data; renderChatMessages(); }
       }
     });
   });
 }
-
 window.syncToCloud = async function(key, data){
   localStorage.setItem(key, JSON.stringify(data));
   if(!window.db) return;
@@ -145,8 +158,8 @@ let timetable = JSON.parse(localStorage.getItem('grade9c_timetable')) || [{ id: 
 let yearbook = JSON.parse(localStorage.getItem('grade9c_yearbook')) || [{ id: 1, name: "Ali Hammoud", url: "https://placehold.co/400x400/2563eb/ffffff?text=Ali" }];
 let babyPhotos = JSON.parse(localStorage.getItem('grade9c_baby')) || [{ id: 1, name: "Fatima Zein", url: "https://placehold.co/400x400/db2777/ffffff?text=Baby" }];
 let wallNotes = JSON.parse(localStorage.getItem('grade9c_wall')) || [{ id: 1, name: "Hassan Fakih", text: "Good luck exams!", time: "Today" }];
+let chatMessagesData = JSON.parse(localStorage.getItem('grade9c_chat')) || [];
 let activeModalType = '';
-
 window.onload = function() {
     if (!currentUser) { document.getElementById('pinModal').classList.remove('hidden'); document.getElementById('pinModal').classList.add('flex'); }
     else { applyLoginState(); }
@@ -157,7 +170,7 @@ function logout(){ currentUser = null; localStorage.removeItem('grade9c_current_
 function applyLoginState(){ if (!currentUser) return; document.getElementById('userInfoBadge').classList.remove('hidden'); document.getElementById('userNameDisplay').textContent = currentUser.name; document.getElementById('userRoleDisplay').textContent = currentUser.isAdmin? "Master Administrator" : "Grade 9C Student"; document.getElementById('footerUserStatus').textContent = `Logged in as: ${currentUser.name}`; if (currentUser.isAdmin) { document.getElementById('adminNavBtn').classList.remove('hidden'); document.getElementById('mobileAdminContainer').classList.remove('hidden'); } else { document.getElementById('adminNavBtn').classList.add('hidden'); document.getElementById('mobileAdminContainer').classList.add('hidden'); } }
 function toggleMobileMenu(){ document.getElementById('mobileMenu').classList.toggle('hidden'); }
 function logAction(actionDesc){ const entry = { time: new Date().toLocaleTimeString() + ' ' + new Date().toLocaleDateString(), user: currentUser? currentUser.name : "Guest", action: actionDesc }; auditLogs.unshift(entry); if(window.syncToCloud) window.syncToCloud('grade9c_logs', auditLogs); else localStorage.setItem('grade9c_logs', JSON.stringify(auditLogs)); }
-function renderAll(){ renderAnnouncements(); renderHomework(); renderTimetable(); renderYearbook(); renderBabyPhotos(); renderWall(); renderAdminPanel(); }
+function renderAll(){ renderAnnouncements(); renderHomework(); renderTimetable(); renderYearbook(); renderBabyPhotos(); renderWall(); renderAdminPanel(); renderChatMessages(); }
 function renderAnnouncements(){ document.getElementById('announcementsGrid').innerHTML = announcements.map(item => `<div class="bg-white rounded-2xl p-6 border shadow-sm flex flex-col justify-between"><div><div class="flex justify-between mb-3"><span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-600">${item.date}</span>${currentUser? `<button onclick="deleteItem('announcements', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><h3 class="font-bold text-lg mb-2">${item.title}</h3><p class="text-slate-600 text-sm mb-4">${item.content}</p>${item.image? `<img src="${item.image}" class="rounded-xl w-full h-48 object-cover mb-4">` : ''}</div><div class="pt-4 border-t text-xs text-slate-400">Posted by <strong>${item.author}</strong></div></div>`).join(''); }
 function renderHomework(){ document.getElementById('homeworkGrid').innerHTML = homework.map(item => `<div class="bg-white rounded-2xl p-6 border shadow-sm"><div class="flex justify-between mb-3"><span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600">${item.subject}</span>${currentUser? `<button onclick="deleteItem('homework', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><p class="font-medium text-sm mb-4">${item.task}</p>${item.image? `<img src="${item.image}" class="rounded-xl w-full h-48 object-cover mb-4">` : ''}<div class="pt-4 border-t text-xs flex justify-between"><span class="font-semibold text-rose-600">Due: ${item.dueDate}</span><span>By ${item.author}</span></div></div>`).join(''); }
 function renderTimetable(){ document.getElementById('timetableBody').innerHTML = timetable.map(item => `<tr class="hover:bg-slate-50"><td class="py-4 px-6 font-semibold">${item.day}</td><td class="py-4 px-6">${item.subject}</td><td class="py-4 px-6 font-mono text-xs">${item.time}</td><td class="py-4 px-6 text-right">${currentUser? `<button onclick="deleteItem('timetable', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</td></tr>`).join(''); }
@@ -165,6 +178,42 @@ function renderYearbook(){ document.getElementById('yearbookGrid').innerHTML = y
 function renderBabyPhotos(){ document.getElementById('babyGrid').innerHTML = babyPhotos.map(item => `<div class="relative group bg-white rounded-2xl overflow-hidden border aspect-square"><img src="${item.url}" class="w-full h-full object-cover group-hover:scale-105 transition"><div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 text-white"><p class="font-bold text-sm">Baby: ${item.name}</p>${currentUser? `<button onclick="deleteItem('baby', ${item.id})" class="text-xs text-rose-300 mt-1 text-left">Delete</button>` : ''}</div></div>`).join(''); }
 function renderWall(){ document.getElementById('wallGrid').innerHTML = wallNotes.map(item => `<div class="bg-white rounded-2xl p-6 border shadow-sm"><div class="flex justify-between mb-3"><span class="font-bold text-sm">${item.name}</span>${currentUser? `<button onclick="deleteItem('wall', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><p class="text-slate-600 text-sm">${item.text}</p><div class="pt-4 border-t text-[10px] text-slate-400">${item.time}</div></div>`).join(''); }
 function renderAdminPanel(){ document.getElementById('pinListContainer').innerHTML = Object.entries(studentPins).map(([pin, data]) => `<div class="bg-white p-2.5 rounded-lg border flex justify-between text-xs"><div><span class="font-mono font-bold text-purple-700">${pin}</span><div class="text-slate-600">${data.name}</div></div>${pin!== 'overrideadmin9c'? `<button onclick="deletePin('${pin}')" class="text-rose-500">Remove</button>` : '<span class="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded">Admin</span>'}</div>`).join(''); document.getElementById('auditLogContainer').innerHTML = auditLogs.map(log => `<div class="p-2 bg-white rounded border"><div class="text-[10px] text-slate-400">${log.time} - <strong class="text-purple-600">${log.user}</strong></div><div class="text-slate-700 mt-0.5">${log.action}</div></div>`).join(''); }
+function renderChatMessages(){
+    const box = document.getElementById('chatMessages');
+    if(!box) return;
+    if(chatMessagesData.length===0){
+        box.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm"><i class="fa-solid fa-comments text-2xl mb-2 block"></i>No messages yet. Be first to say hi! 👋</div>`;
+        return;
+    }
+    box.innerHTML = chatMessagesData.map(m => {
+        const isMe = currentUser && m.pin === currentUser.pin;
+        return `<div class="flex flex-col ${isMe? 'items-end' : 'items-start'}">
+            <div class="max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${isMe? 'bg-sky-600 text-white rounded-br-sm' : 'bg-white border shadow-sm rounded-bl-sm'}">
+                <div class="font-bold text-[11px] ${isMe? 'text-white/70' : 'text-sky-600'} mb-0.5">${m.name.replace(/</g,'&lt;')} ${isMe? '(You)' : ''}</div>
+                <div class="leading-snug">${m.text.replace(/</g,'&lt;')}</div>
+                <div class="text-[10px] opacity-60 mt-1">${m.timeStr || ''}</div>
+            </div>
+        </div>`;
+    }).join('');
+    box.scrollTop = box.scrollHeight;
+}
+async function sendChatMessage(){
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if(!text) return;
+    if(!currentUser){ alert('Login first'); return; }
+    const msg = { id: Date.now(), name: currentUser.name, pin: currentUser.pin, text: text, time: Date.now(), timeStr: new Date().toLocaleTimeString() };
+    chatMessagesData.push(msg);
+    if(chatMessagesData.length>200) chatMessagesData = chatMessagesData.slice(-200);
+    await window.syncToCloud('grade9c_chat', chatMessagesData);
+    logAction(`Sent LIVE CHAT: "${text}" | Name: ${currentUser.name} | PIN: ${currentUser.pin}`);
+    input.value = '';
+    renderChatMessages();
+}
+function openChatModal(){ document.getElementById('chatModal').classList.remove('hidden'); document.getElementById('chatModal').classList.add('flex'); document.body.style.overflow='hidden'; renderChatMessages(); }
+function closeChatModal(){ document.getElementById('chatModal').classList.add('hidden'); document.getElementById('chatModal').classList.remove('flex'); document.body.style.overflow=''; }
+document.addEventListener('DOMContentLoaded', ()=>{ document.getElementById('chatInput')?.addEventListener('keypress', (e)=>{ if(e.key==='Enter') sendChatMessage(); }); });
+
 function openAddModal(type){ activeModalType = type; document.getElementById('addModal').classList.remove('hidden'); document.getElementById('addModal').classList.add('flex'); const title = document.getElementById('modalTitle'); const fields = document.getElementById('modalFormFields'); if (type === 'announcement') { title.textContent = "Post Announcement"; fields.innerHTML = `<input type="text" id="annTitle" required placeholder="Title" class="w-full px-4 py-2.5 rounded-xl border text-sm"><textarea id="annContent" required placeholder="Details..." rows="3" class="w-full px-4 py-2.5 rounded-xl border text-sm"></textarea><input type="url" id="annImage" placeholder="Image URL (optional)" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; } else if (type === 'homework') { title.textContent = "Add Homework"; fields.innerHTML = `<input type="text" id="hwSubject" required placeholder="Subject" class="w-full px-4 py-2.5 rounded-xl border text-sm"><textarea id="hwTask" required placeholder="Task..." rows="3" class="w-full px-4 py-2.5 rounded-xl border text-sm"></textarea><input type="text" id="hwDue" required placeholder="Due Date" class="w-full px-4 py-2.5 rounded-xl border text-sm"><input type="url" id="hwImage" placeholder="Image URL (optional)" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; } else if (type === 'timetable') { title.textContent = "Add Period"; fields.innerHTML = `<select id="ttDay" class="w-full px-4 py-2.5 rounded-xl border text-sm"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select><input type="text" id="ttSubject" required placeholder="Subject" class="w-full px-4 py-2.5 rounded-xl border text-sm"><input type="text" id="ttTime" required placeholder="Time" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; } else if (type === 'yearbook') { title.textContent = "Upload Portrait"; fields.innerHTML = `<input type="text" id="ybName" required placeholder="Student Name" class="w-full px-4 py-2.5 rounded-xl border text-sm"><input type="url" id="ybUrl" required placeholder="Photo URL" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; } else if (type === 'baby') { title.textContent = "Upload Childhood Photo"; fields.innerHTML = `<input type="text" id="babyName" required placeholder="Student Name" class="w-full px-4 py-2.5 rounded-xl border text-sm"><input type="url" id="babyUrl" required placeholder="Photo URL" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; } else if (type === 'wall') { title.textContent = "Post Note"; fields.innerHTML = `<textarea id="wallText" required placeholder="Write note..." rows="3" class="w-full px-4 py-2.5 rounded-xl border text-sm"></textarea>`; } }
 function closeAddModal(){ document.getElementById('addModal').classList.remove('flex'); document.getElementById('addModal').classList.add('hidden'); }
 async function handleGenericSubmit(e){ e.preventDefault(); const id = Date.now(); const author = currentUser? currentUser.name : "Student"; if (activeModalType === 'announcement') { const title = document.getElementById('annTitle').value; const content = document.getElementById('annContent').value; const image = document.getElementById('annImage').value; announcements.unshift({ id, title, content, author, date: new Date().toLocaleDateString(), image }); await window.syncToCloud('grade9c_announcements', announcements); logAction(`Posted announcement: "${title}"`); } else if (activeModalType === 'homework') { const subject = document.getElementById('hwSubject').value; const task = document.getElementById('hwTask').value; const dueDate = document.getElementById('hwDue').value; const image = document.getElementById('hwImage').value; homework.unshift({ id, subject, task, dueDate, author, image }); await window.syncToCloud('grade9c_homework', homework); logAction(`Added homework for ${subject}`); } else if (activeModalType === 'timetable') { const day = document.getElementById('ttDay').value; const subject = document.getElementById('ttSubject').value; const time = document.getElementById('ttTime').value; timetable.push({ id, day, subject, time }); await window.syncToCloud('grade9c_timetable', timetable); logAction(`Added timetable: ${subject}`); } else if (activeModalType === 'yearbook') { const name = document.getElementById('ybName').value; const url = document.getElementById('ybUrl').value; yearbook.push({ id, name, url }); await window.syncToCloud('grade9c_yearbook', yearbook); logAction(`Uploaded portrait for ${name}`); } else if (activeModalType === 'baby') { const name = document.getElementById('babyName').value; const url = document.getElementById('babyUrl').value; babyPhotos.push({ id, name, url }); await window.syncToCloud('grade9c_baby', babyPhotos); logAction(`Uploaded childhood photo for ${name}`); } else if (activeModalType === 'wall') { const text = document.getElementById('wallText').value; wallNotes.unshift({ id, name: author, text, time: "Just now" }); await window.syncToCloud('grade9c_wall', wallNotes); logAction(`Posted note to Class Wall`); } closeAddModal(); renderAll(); }
@@ -175,8 +224,6 @@ async function handleAddPin(e){ e.preventDefault(); const pin = document.getElem
 async function deletePin(pin){ delete studentPins[pin]; await window.syncToCloud('grade9c_pins', studentPins); logAction(`Removed PIN: ${pin}`); renderAdminPanel(); }
 async function clearLogs(){ auditLogs = []; await window.syncToCloud('grade9c_logs', auditLogs); renderAdminPanel(); }
 function switchAiTab(tab){ const chatPane = document.getElementById('aiChatPane'); const quizPane = document.getElementById('aiQuizPane'); const chatBtn = document.getElementById('aiTabChatBtn'); const quizBtn = document.getElementById('aiTabQuizBtn'); if (tab === 'chat') { chatPane.classList.remove('hidden'); quizPane.classList.add('hidden'); chatBtn.className = "px-5 py-2.5 rounded-xl text-sm font-semibold bg-purple-600 text-white shadow"; quizBtn.className = "px-5 py-2.5 rounded-xl text-sm font-semibold bg-white/10 text-slate-300 hover:bg-white/20"; } else { chatPane.classList.add('hidden'); quizPane.classList.remove('hidden'); quizBtn.className = "px-5 py-2.5 rounded-xl text-sm font-semibold bg-purple-600 text-white shadow"; chatBtn.className = "px-5 py-2.5 rounded-xl text-sm font-semibold bg-white/10 text-slate-300 hover:bg-white/20"; } }
-
-// *** FIXED REAL AI - USES VALID GEMINI MODEL ***
 async function handleAiChat(e) {
     e.preventDefault();
     const inputEl = document.getElementById('aiChatInput');
@@ -189,10 +236,7 @@ async function handleAiChat(e) {
     chatMessages.innerHTML += `<div id="${loadingId}" class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-300 animate-pulse">Thinking...</div></div>`;
     chatMessages.scrollTop = chatMessages.scrollHeight;
     try {
-        // IMPORTANT: Get FREE Gemini API key from https://aistudio.google.com/app/apikey
-        // Replace below with your REAL Gemini key (starts with AIza...)
         const GEMINI_API_KEY = "AQ.Ab8RN6ItKU0iB_a-FeFJptB3ily9oeVwyt_KMmPqZ0oljFoR-A";
-        // Using gemini-1.5-flash which is free and fast
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
         const response = await fetch(apiUrl, {
             method: 'POST',
@@ -203,18 +247,16 @@ async function handleAiChat(e) {
             })
         });
         const result = await response.json();
-        console.log(result);
         if(result.error){ throw new Error(result.error.message); }
         const reply = result.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't answer. Try again!";
         document.getElementById(loadingId).remove();
         chatMessages.innerHTML += `<div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-200 leading-relaxed whitespace-pre-wrap">${reply}</div></div>`;
     } catch (err) {
         document.getElementById(loadingId)?.remove();
-        chatMessages.innerHTML += `<div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-rose-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-triangle-exclamation text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-rose-300">AI Error: ${err.message}<br><br>To fix: Go to aistudio.google.com/app/apikey, create FREE key, replace GEMINI_API_KEY in code. Your current key is Firebase key, not Gemini key.</div></div>`;
+        chatMessages.innerHTML += `<div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-rose-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-triangle-exclamation text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-rose-300">AI Error: ${err.message}</div></div>`;
     }
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
-
 async function generateQuiz(subject) {
     const outputEl = document.getElementById('quizOutput');
     outputEl.innerHTML = `<div class="text-purple-300 animate-pulse py-4">Generating 3-question quiz for ${subject}...</div>`;
@@ -234,7 +276,7 @@ async function generateQuiz(subject) {
         const reply = result.candidates?.[0]?.content?.parts?.[0]?.text || "Could not generate quiz.";
         outputEl.innerHTML = `<div class="space-y-4 pt-2 whitespace-pre-wrap">${reply}</div>`;
     } catch (err) {
-        outputEl.innerHTML = `<div class="text-rose-400">Failed: ${err.message}<br>Fix your Gemini API key - get free one at aistudio.google.com</div>`;
+        outputEl.innerHTML = `<div class="text-rose-400">Failed: ${err.message}</div>`;
     }
 }
 </script>
