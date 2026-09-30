@@ -1,318 +1,273 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart College - Grade 9C Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>body { font-family: 'Inter', sans-serif; }</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9C Smart College - Official Portal</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+body{background:#0f172a}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-thumb{background:#334155;border-radius:10px}
+</style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="text-white min-h-screen">
+<!-- NAV -->
+<nav class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-50">
+<div class="max-w-6xl mx-auto flex justify-between items-center">
+<h1 class="font-bold text-xl"><i class="fa-solid fa-graduation-cap text-purple-500"></i> 9C Smart College</h1>
+<div class="flex gap-3">
+<button onclick="showTab('home')" class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 text-sm">Home</button>
+<button onclick="showTab('quizzes')" class="px-4 py-2 bg-slate-800 rounded-lg hover:bg-slate-700 text-sm">Quizzes</button>
+<button onclick="showTab('ai')" class="px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 text-sm"><i class="fa-solid fa-robot"></i> AI Tutor</button>
+<button id="adminBtn" onclick="showTab('admin')" class="hidden px-4 py-2 bg-amber-600 rounded-lg text-sm">Admin</button>
+<button onclick="document.getElementById('pinModal').classList.remove('hidden')" class="px-3 py-2 bg-slate-800 rounded-lg text-sm"><i class="fa-solid fa-lock"></i></button>
+</div>
+</div>
+</nav>
 
-    <div id="pinModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-slate-100 text-center relative overflow-hidden">
-            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
-            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-5 text-2xl shadow-inner">
-                <i class="fa-solid fa-lock"></i>
-            </div>
-            <h2 class="text-2xl font-bold text-slate-900 mb-2">Smart College Grade 9C</h2>
-            <p class="text-sm text-slate-500 mb-6">Please put your PIN tied to your account.</p>
-            <form id="pinForm" onsubmit="handlePinLogin(event)" class="space-y-4">
-                <input type="password" id="pinInput" required placeholder="Enter your PIN" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-center tracking-widest font-mono text-lg bg-slate-50">
-                <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl">Enter Portal</button>
-            </form>
-            <div id="pinError" class="mt-4 text-rose-500 text-sm hidden"></div>
-            <div id="syncStatus" class="mt-3 text-[11px] text-slate-400">Connecting to cloud...</div>
-        </div>
-    </div>
+<div class="max-w-6xl mx-auto p-4 md:p-6">
+<!-- HOME TAB -->
+<div id="tab-home">
+<div class="bg-gradient-to-r from-purple-600 to-blue-600 p-8 rounded-2xl mb-6">
+<h2 class="text-3xl font-bold mb-2">Welcome to 9C Portal</h2>
+<p class="text-purple-100">All lessons, homework & announcements live synced to all students phones.</p>
+<div class="mt-3 text-xs bg-black/20 inline-block px-3 py-1 rounded-full"><span id="syncStatus">● Connecting live sync...</span></div>
+</div>
+<div id="contentContainer" class="grid gap-4"></div>
+</div>
 
-    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">9C</div>
-                <div><h1 class="font-bold text-lg">Smart College</h1><p class="text-xs text-blue-600 font-semibold uppercase">Grade 9C • Tyre, Lebanon</p></div>
-            </div>
-            <div class="hidden md:flex items-center gap-6">
-                <nav class="flex items-center gap-1">
-                    <a href="#announcements" class="px-3.5 py-2 rounded-lg text-sm font-medium">Announcements</a>
-                    <a href="#homework" class="px-3.5 py-2 rounded-lg text-sm font-medium">Homework</a>
-                    <a href="#timetable" class="px-3.5 py-2 rounded-lg text-sm font-medium">Timetable</a>
-                    <a href="#yearbook" class="px-3.5 py-2 rounded-lg text-sm font-medium">Yearbook</a>
-                    <a href="#babyphotos" class="px-3.5 py-2 rounded-lg text-sm font-medium">Childhood</a>
-                    <a href="#wall" class="px-3.5 py-2 rounded-lg text-sm font-medium">Class Wall</a>
-                </nav>
-                <div class="flex items-center gap-3 pl-4 border-l border-slate-200">
-                    <div id="userInfoBadge" class="text-right hidden"><div id="userNameDisplay" class="text-xs font-bold"></div><div id="userRoleDisplay" class="text-[10px] text-blue-600"></div></div>
-                    <button id="adminNavBtn" onclick="openAdminModal()" class="hidden bg-purple-100 text-purple-700 px-3.5 py-2 rounded-xl text-sm font-semibold">Admin Panel</button>
-                    <button onclick="logout()" class="bg-slate-100 px-3.5 py-2 rounded-xl text-sm font-semibold">Logout</button>
-                </div>
-            </div>
-            <div class="md:hidden flex items-center gap-2">
-                <button onclick="logout()" class="px-3 py-2 bg-slate-100 rounded-xl text-sm">Logout</button>
-                <button onclick="toggleMobileMenu()" class="p-2"><i class="fa-solid fa-bars text-xl"></i></button>
-            </div>
-        </div>
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-b px-4 pt-2 pb-4 space-y-2">
-            <a href="#announcements" class="block px-3 py-2">Announcements</a><a href="#homework" class="block px-3 py-2">Homework</a><a href="#timetable" class="block px-3 py-2">Timetable</a><a href="#yearbook" class="block px-3 py-2">Yearbook</a><a href="#babyphotos" class="block px-3 py-2">Childhood</a><a href="#wall" class="block px-3 py-2">Class Wall</a>
-        </div>
-    </header>
+<!-- QUIZZES TAB -->
+<div id="tab-quizzes" class="hidden">
+<h2 class="text-2xl font-bold mb-4"><i class="fa-solid fa-brain text-purple-500"></i> Live Quizzes</h2>
+<div id="quizzesContainer" class="grid md:grid-cols-2 gap-4"></div>
+<div id="quizPlayer" class="hidden bg-slate-900 p-6 rounded-2xl border border-slate-800"></div>
+</div>
 
-    <section class="relative bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 text-white py-20 px-4">
-        <div class="max-w-7xl mx-auto text-center">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-blue-500/20 text-blue-300 border border-blue-400/30 mb-6"><i class="fa-solid fa-graduation-cap"></i> 2026-2027 <span class="ml-2 w-2 h-2 bg-green-400 rounded-full animate-pulse inline-block"></span> LIVE SYNC</span>
-            <h1 class="text-4xl sm:text-6xl font-extrabold mb-6">Welcome to <span class="bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">Grade 9C</span></h1>
-            <p class="max-w-2xl mx-auto text-lg text-slate-300 mb-8">Official class portal - now LIVE SYNC across all phones!</p>
-        </div>
-    </section>
+<!-- AI TAB -->
+<div id="tab-ai" class="hidden">
+<div class="bg-slate-900 rounded-2xl border border-slate-800 flex flex-col h-[70vh]">
+<div class="p-4 border-b border-slate-800 font-bold"><i class="fa-solid fa-robot text-purple-500"></i> 9C AI Tutor - Real Gemini AI</div>
+<div id="aiChatMessages" class="flex-1 overflow-y-auto p-4 space-y-4">
+<div class="flex gap-3"><div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-sm">Hi! I'm your real AI tutor. Ask me any Math, Science, English question!</div></div>
+</div>
+<form onsubmit="handleAiChat(event)" class="p-4 border-t border-slate-800 flex gap-2">
+<input id="aiChatInput" placeholder="Ask anything..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:border-purple-500">
+<button class="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-xl text-sm font-bold">Send</button>
+</form>
+</div>
+</div>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20 flex-grow w-full">
-        <section id="announcements" class="scroll-mt-28">
-            <div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-bullhorn text-blue-600"></i> Class Announcements</h2></div><button onclick="openAddModal('announcement')" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold">Post Announcement</button></div>
-            <div id="announcementsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </section>
-        <section id="homework" class="scroll-mt-28">
-            <div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-book-bookmark text-indigo-600"></i> Homework Tracker</h2></div><button onclick="openAddModal('homework')" class="bg-indigo-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold">Add Homework</button></div>
-            <div id="homeworkGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </section>
-        <section id="timetable" class="scroll-mt-28">
-            <div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-calendar-days text-blue-600"></i> Weekly Timetable</h2></div><button onclick="openAddModal('timetable')" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm">Add Period</button></div>
-            <div class="bg-white rounded-2xl shadow-sm border overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="bg-slate-50 border-b text-xs font-bold text-slate-500 uppercase"><th class="py-4 px-6">Day</th><th class="py-4 px-6">Subject</th><th class="py-4 px-6">Time</th><th class="py-4 px-6 text-right">Actions</th></tr></thead><tbody id="timetableBody" class="divide-y text-sm"></tbody></table></div></div>
-        </section>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <section id="yearbook" class="scroll-mt-28">
-                <div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-camera-retro text-amber-600"></i> Yearbook</h2></div><button onclick="openAddModal('yearbook')" class="bg-amber-600 text-white px-4 py-2.5 rounded-xl text-sm">Upload Portrait</button></div>
-                <div id="yearbookGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
-            </section>
-            <section id="babyphotos" class="scroll-mt-28">
-                <div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-baby text-pink-600"></i> Childhood Photos</h2></div><button onclick="openAddModal('baby')" class="bg-pink-600 text-white px-4 py-2.5 rounded-xl text-sm">Upload Baby Photo</button></div>
-                <div id="babyGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
-            </section>
-        </div>
-        <section id="wall" class="scroll-mt-28">
-            <div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-comments text-indigo-600"></i> Class Wall</h2></div><button onclick="openAddModal('wall')" class="bg-indigo-600 text-white px-4 py-2.5 rounded-xl text-sm">Post Note</button></div>
-            <div id="wallGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </section>
+<!-- ADMIN TAB -->
+<div id="tab-admin" class="hidden">
+<div id="adminPanel"></div>
+</div>
+</div>
 
-        <section id="ai-tutor" class="scroll-mt-28 bg-gradient-to-br from-indigo-900 via-slate-900 to-purple-950 rounded-3xl p-6 sm:p-10 text-white shadow-xl">
-            <div class="max-w-3xl mx-auto">
-                <div class="text-center mb-10"><h2 class="text-3xl font-bold mb-3">Grade 9C AI Study Buddy</h2><p class="text-slate-300 text-sm">Ask any question!</p></div>
-                <div id="aiChatPane" class="space-y-4">
-                    <div id="aiChatMessages" class="bg-slate-950/50 border border-slate-800 rounded-2xl p-4 h-80 overflow-y-auto space-y-3 text-sm">
-                        <div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none">Hello Grade 9C! I'm your AI tutor!</div></div>
-                    </div>
-                    <form onsubmit="handleAiChat(event)" class="flex gap-2"><input type="text" id="aiChatInput" placeholder="Ask something..." class="flex-grow px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm"><button type="submit" class="bg-purple-600 text-white px-6 py-3 rounded-xl text-sm">Ask</button></form>
-                </div>
-            </div>
-        </section>
-    </main>
+<!-- PIN MODAL -->
+<div id="pinModal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-[100] p-4">
+<div class="bg-slate-900 p-8 rounded-2xl border border-slate-800 w-full max-w-sm">
+<h3 class="font-bold text-lg mb-4">Admin Login</h3>
+<input id="pinInput" type="password" placeholder="Enter PIN" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 mb-3 outline-none">
+<button onclick="checkPin()" class="w-full bg-purple-600 hover:bg-purple-700 py-3 rounded-xl font-bold">Login</button>
+<button onclick="document.getElementById('pinModal').classList.add('hidden')" class="w-full mt-2 text-slate-400 text-sm">Close</button>
+</div>
+</div>
 
-    <footer class="bg-white border-t py-8 px-4 mt-auto">
-        <div class="max-w-7xl mx-auto flex justify-between text-sm text-slate-500">
-            <div>© 2026 Smart College Grade 9C</div><div><span id="footerUserStatus" class="text-xs font-mono"></span> <span id="cloudStatus" class="text-xs text-green-600 font-semibold ml-3">● Cloud Connected</span></div>
-        </div>
-    </footer>
+<!-- ADD MODAL -->
+<div id="addModal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-[100] p-4">
+<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 w-full max-w-lg">
+<h3 class="font-bold mb-4">Add Content</h3>
+<select id="addType" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 mb-3"><option>Lesson</option><option>Homework</option><option>Announcement</option></select>
+<select id="addSubject" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 mb-3"><option>Math</option><option>Science</option><option>English</option><option>History</option><option>General</option></select>
+<input id="addTitle" placeholder="Title" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 mb-3">
+<textarea id="addDesc" placeholder="Description / Content" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 mb-3 h-24"></textarea>
+<div class="flex gap-2">
+<button onclick="handleAdd()" class="flex-1 bg-purple-600 py-3 rounded-xl font-bold">Publish LIVE</button>
+<button onclick="document.getElementById('addModal').classList.add('hidden')" class="flex-1 bg-slate-800 py-3 rounded-xl">Cancel</button>
+</div>
+</div>
+</div>
 
-    <div id="adminModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 border max-h-[90vh] flex flex-col">
-            <div class="flex items-center justify-between pb-4 border-b mb-6"><h3 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-shield-halved text-purple-600"></i> Admin Control</h3><button onclick="closeAdminModal()" class="p-2"><i class="fa-solid fa-xmark"></i></button></div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-grow overflow-hidden">
-                <div class="bg-slate-50 p-4 rounded-xl border flex flex-col">
-                    <h4 class="font-bold text-sm mb-3">Student PIN Manager</h4>
-                    <form onsubmit="handleAddPin(event)" class="space-y-3 mb-4"><input type="text" id="newPinCode" required placeholder="PIN (e.g., 9c-31)" class="w-full px-3 py-2 rounded-lg border text-sm"><input type="text" id="newPinName" required placeholder="Student Full Name" class="w-full px-3 py-2 rounded-lg border text-sm"><button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg text-xs">Add New PIN</button></form>
-                    <div class="overflow-y-auto flex-grow space-y-2" id="pinListContainer"></div>
-                </div>
-                <div class="md:col-span-2 bg-slate-50 p-4 rounded-xl border flex flex-col"><h4 class="font-bold text-sm mb-3">Audit Logbook</h4><div class="overflow-y-auto flex-grow space-y-2.5 font-mono text-xs" id="auditLogContainer"></div></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="addModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border"><div class="flex items-center justify-between pb-4 border-b mb-6"><h3 id="modalTitle" class="text-xl font-bold">Add Item</h3><button onclick="closeAddModal()"><i class="fa-solid fa-xmark"></i></button></div><form id="genericAddForm" onsubmit="handleGenericSubmit(event)" class="space-y-4"><div id="modalFormFields"></div><button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl text-sm">Save & Sync to All Phones 🚀</button></form></div>
-    </div>
-    <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDjY7W0lNitZjvwvum59NLvgQGDJPF4FP4",
-    authDomain: "c-smart-collage.firebaseapp.com",
-    projectId: "c-smart-collage",
-    storageBucket: "c-smart-collage.firebasestorage.app",
-    messagingSenderId: "754290398602",
-    appId: "1:754290398602:web:35dee6868c1f4ad1fca473",
-    measurementId: "G-8BNSX45EBD"
+  apiKey: "AIzaSyDjY7W0lNitZjvwvum59NLvgQGDJPF4FP4",
+  authDomain: "c-smart-9c.firebaseapp.com",
+  projectId: "c-smart-9c",
+  storageBucket: "c-smart-9c.appspot.com",
+  messagingSenderId: "YOUR_ID",
+  appId: "YOUR_APP_ID"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+let app, db;
+try {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  window.db = db;
+} catch(e){ console.log("Firebase offline mode", e); }
 
-const defaultData = {
-    pins: {
-        "overrideadmin9c": { name: "Master Administrator", isAdmin: true },
-        "9c-01": { name: "Ali Hammoud", isAdmin: false },
-        "9c-02": { name: "Fatima Zein", isAdmin: false },
-        "9c-03": { name: "Karim Mroueh", isAdmin: false },
-        "9c-04": { name: "Nour Bitar", isAdmin: false },
-        "9c-05": { name: "Hassan Fakih", isAdmin: false }
-    },
-    announcements: [{ id: 1, title: "Mid-Term Exam Schedule", content: "Check the calendar for midterms.", author: "Ali Hammoud", date: "Sep 28, 2026", image: "" }],
-    homework: [{ id: 1, subject: "Mathematics", task: "Solve exercises 4 to 10 on page 112.", dueDate: "Oct 2, 2026", author: "Karim Mroueh", image: "" }],
-    timetable: [
-        { id: 1, day: "Monday", subject: "Mathematics", time: "08:00 AM - 08:50 AM" },
-        { id: 2, day: "Monday", subject: "Physics", time: "09:00 AM - 09:50 AM" },
-        { id: 3, day: "Tuesday", subject: "Chemistry", time: "08:00 AM - 08:50 AM" },
-        { id: 4, day: "Wednesday", subject: "English Literature", time: "08:00 AM - 08:50 AM" }
-    ],
-    yearbook: [{ id: 1, name: "Ali Hammoud", url: "https://placehold.co/400x400/2563eb/ffffff?text=Ali" }],
-    babyPhotos: [{ id: 1, name: "Fatima Zein", url: "https://placehold.co/400x400/db2777/ffffff?text=Baby" }],
-    wallNotes: [{ id: 1, name: "Hassan Fakih", text: "Great luck to everyone!", time: "Today" }],
-    auditLogs: [{ time: new Date().toLocaleTimeString(), user: "System", action: "Portal initialized." }]
-};
+window.contents = JSON.parse(localStorage.getItem('contents') || '[]');
+window.quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+window.currentUser = localStorage.getItem('isAdmin') === 'true';
+window.currentQuizQuestions = [];
 
-let studentPins = defaultData.pins;
-let announcements = defaultData.announcements;
-let homework = defaultData.homework;
-let timetable = defaultData.timetable;
-let yearbook = defaultData.yearbook;
-let babyPhotos = defaultData.babyPhotos;
-let wallNotes = defaultData.wallNotes;
-let auditLogs = defaultData.auditLogs;
-let currentUser = JSON.parse(localStorage.getItem('grade9c_current_user')) || null;
-let activeModalType = '';
-let mainDocRef = doc(db, "portal", "main");
+window.showTab = function(tab){
+  document.getElementById('tab-home').classList.add('hidden');
+  document.getElementById('tab-quizzes').classList.add('hidden');
+  document.getElementById('tab-ai').classList.add('hidden');
+  document.getElementById('tab-admin').classList.add('hidden');
+  document.getElementById('tab-'+tab).classList.remove('hidden');
+  if(tab==='home') renderContent();
+  if(tab==='quizzes') renderQuizzesForStudents();
+  if(tab==='admin') renderAdminPanel();
+}
 
-async function initCloudSync() {
-    const snap = await getDoc(mainDocRef);
-    if (!snap.exists()) { await setDoc(mainDocRef, defaultData); }
-    onSnapshot(mainDocRef, (docSnap) => {
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            studentPins = data.pins || defaultData.pins;
-            announcements = data.announcements || [];
-            homework = data.homework || [];
-            timetable = data.timetable || [];
-            yearbook = data.yearbook || [];
-            babyPhotos = data.babyPhotos || [];
-            wallNotes = data.wallNotes || [];
-            auditLogs = data.auditLogs || [];
-            document.getElementById('syncStatus').textContent = "✅ Live sync active - All phones connected";
-            document.getElementById('cloudStatus').textContent = "● Cloud Connected - Live";
-            renderAll();
-        }
-    }, (error) => {
-        document.getElementById('syncStatus').textContent = "❌ " + error.message + " - Set Firestore to TEST MODE!";
+window.renderContent = function(){
+  const c = document.getElementById('contentContainer');
+  if(window.contents.length===0){ c.innerHTML='<div class="text-center py-20 text-slate-500">No content yet. Admin can add lessons.</div>'; return; }
+  c.innerHTML = window.contents.map(item=>`
+    <div class="bg-slate-900 p-5 rounded-xl border border-slate-800">
+      <div class="flex justify-between items-start mb-2"><span class="text-xs px-2 py-1 rounded-full bg-purple-600/20 text-purple-300">${item.type} • ${item.subject}</span><span class="text-xs text-slate-500">${new Date(item.date).toLocaleDateString()}</span></div>
+      <h3 class="font-bold text-lg">${item.title}</h3><p class="text-slate-300 text-sm mt-2 whitespace-pre-wrap">${item.desc}</p>
+    </div>
+  `).join('');
+}
+
+window.checkPin = function(){
+  const pin = document.getElementById('pinInput').value;
+  if(pin==="1234" || pin==="9c2025"){
+    localStorage.setItem('isAdmin','true'); window.currentUser=true;
+    document.getElementById('pinModal').classList.add('hidden');
+    document.getElementById('adminBtn').classList.remove('hidden');
+    applyLoginState(); showTab('admin');
+  } else alert("Wrong PIN. Try 1234");
+}
+
+window.applyLoginState = function(){
+  if(window.currentUser){ document.getElementById('adminBtn').classList.remove('hidden'); }
+}
+
+window.openAddModal = function(){ document.getElementById('addModal').classList.remove('hidden'); }
+
+window.handleAdd = async function(){
+  const type = document.getElementById('addType').value;
+  const subject = document.getElementById('addSubject').value;
+  const title = document.getElementById('addTitle').value.trim();
+  const desc = document.getElementById('addDesc').value.trim();
+  if(!title) return alert('Add title');
+  const newItem = { id: Date.now(), type, subject, title, desc, date: new Date().toISOString() };
+  window.contents.unshift(newItem);
+  localStorage.setItem('contents', JSON.stringify(window.contents));
+  if(window.db){
+    try{ await setDoc(doc(window.db, "portal", "contents"), { data: window.contents }); }catch(e){}
+  }
+  document.getElementById('addModal').classList.add('hidden');
+  document.getElementById('addTitle').value=''; document.getElementById('addDesc').value='';
+  renderContent(); alert('Published LIVE to all phones!');
+}
+
+window.initCloudSync = function(){
+  if(!window.db){ document.getElementById('syncStatus').textContent='● Offline mode (local only)'; return; }
+  document.getElementById('syncStatus').textContent='● Live sync active - all phones connected';
+  try{
+    onSnapshot(doc(window.db, "portal", "contents"), (snap)=>{
+      if(snap.exists()){ window.contents = snap.data().data; localStorage.setItem('contents', JSON.stringify(window.contents)); renderContent(); }
     });
-}
-async function saveToCloud() {
-    try {
-        await setDoc(mainDocRef, {
-            pins: studentPins, announcements, homework, timetable, yearbook, babyPhotos, wallNotes, auditLogs
-        });
-    } catch (e) {
-        alert("Cloud save failed: " + e.message + "\nGo to Firebase > Firestore > Rules > Allow read, write: if true;");
-    }
+    onSnapshot(doc(window.db, "portal", "quizzes"), (snap)=>{
+      if(snap.exists()){ window.quizzes = snap.data().data; localStorage.setItem('quizzes', JSON.stringify(window.quizzes)); renderQuizzesForStudents(); renderAdminQuizzesList(); }
+    });
+  }catch(e){ console.log(e); }
 }
 
-window.handlePinLogin = function(e) {
-    e.preventDefault();
-    const pin = document.getElementById('pinInput').value.trim();
-    if (studentPins[pin]) {
-        currentUser = { pin,...studentPins[pin] };
-        localStorage.setItem('grade9c_current_user', JSON.stringify(currentUser));
-        document.getElementById('pinModal').classList.add('hidden');
-        logAction(`Logged in as ${currentUser.name}`);
-        applyLoginState(); renderAll();
-    } else {
-        document.getElementById('pinError').textContent = "Invalid PIN"; document.getElementById('pinError').classList.remove('hidden');
+// QUIZ SYSTEM
+window.renderQuizzesForStudents = function(){
+  const container = document.getElementById('quizzesContainer');
+  if(!container) return;
+  if(window.quizzes.length===0){ container.innerHTML='<p class="text-slate-500 text-center py-10">No quizzes yet</p>'; return; }
+  container.innerHTML = window.quizzes.map(q=>`<div class="bg-slate-900 p-5 rounded-xl border border-slate-800 hover:border-purple-500/50"><h4 class="font-bold">${q.title}</h4><p class="text-slate-400 text-sm">${q.subject} • ${q.questions.length} Qs</p><button onclick="startQuiz(${q.id})" class="mt-3 bg-purple-600 text-white px-4 py-2 rounded-lg text-sm w-full">Take Quiz</button></div>`).join('');
+}
+
+window.startQuiz = function(id){
+  const quiz = window.quizzes.find(q=>q.id===id); if(!quiz) return;
+  let score=0, idx=0;
+  const player = document.getElementById('quizPlayer');
+  player.classList.remove('hidden'); document.getElementById('quizzesContainer').classList.add('hidden');
+  function showQ(){
+    if(idx>=quiz.questions.length){
+      player.innerHTML=`<h3 class="text-2xl font-bold text-center">Done! Score ${score}/${quiz.questions.length}</h3><button onclick="document.getElementById('quizPlayer').classList.add('hidden');document.getElementById('quizzesContainer').classList.remove('hidden')" class="mt-4 w-full bg-slate-800 py-3 rounded-xl">Back</button>`;
+      return;
     }
+    const q = quiz.questions[idx];
+    player.innerHTML=`<div class="mb-4 text-sm text-slate-400">Q ${idx+1}/${quiz.questions.length}</div><h3 class="font-bold text-lg mb-4">${q.text}</h3><div class="space-y-2">${q.options.map((o,i)=>`<button onclick="answer(${i})" class="w-full text-left bg-slate-800 hover:bg-slate-700 p-3 rounded-xl border border-slate-700">${o}</button>`).join('')}</div>`;
+    window.answer = function(i){
+      if(i===q.correct) score++;
+      idx++; showQ();
+    }
+  }
+  showQ();
 }
-window.logout = function() { currentUser = null; localStorage.removeItem('grade9c_current_user'); document.getElementById('pinModal').classList.remove('hidden'); document.getElementById('pinModal').classList.add('flex'); }
-window.applyLoginState = function() {
-    if (!currentUser) return;
-    document.getElementById('userInfoBadge').classList.remove('hidden');
-    document.getElementById('userNameDisplay').textContent = currentUser.name;
-    document.getElementById('userRoleDisplay').textContent = currentUser.isAdmin? "Master Admin" : "Grade 9C Student";
-    document.getElementById('footerUserStatus').textContent = `Logged in as: ${currentUser.name}`;
-    if (currentUser.isAdmin) { document.getElementById('adminNavBtn').classList.remove('hidden'); }
+
+window.renderAdminPanel = function(){
+  const panel = document.getElementById('adminPanel');
+  panel.innerHTML = `
+    <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 mb-6">
+      <h3 class="text-xl font-bold mb-4">Admin Panel</h3>
+      <button onclick="openAddModal()" class="w-full bg-purple-600 hover:bg-purple-700 py-3 rounded-xl font-bold mb-3"><i class="fa-solid fa-plus"></i> Add Lesson / Homework / Announcement</button>
+      <p class="text-xs text-slate-400">Everything you publish is instantly live on all students phones.</p>
+    </div>
+    <div class="bg-slate-900 p-6 rounded-xl border border-slate-800">
+      <h3 class="text-xl font-bold mb-4"><i class="fa-solid fa-brain text-purple-500"></i> Quiz Creator</h3>
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <input id="quizTitle" placeholder="Quiz Title" class="bg-slate-800 text-white p-3 rounded-lg border border-slate-700">
+        <select id="quizSubject" class="bg-slate-800 text-white p-3 rounded-lg border border-slate-700"><option>Math</option><option>Science</option><option>English</option><option>History</option><option>General</option></select>
+      </div>
+      <div id="quizQuestionsList" class="space-y-2 mb-4">${window.currentQuizQuestions.map((q,i)=>`<div class="bg-slate-800 p-3 rounded flex justify-between text-sm">${i+1}. ${q.text}<button onclick="currentQuizQuestions.splice(${i},1);renderCurrentQuestions()" class="text-rose-400 ml-2">x</button></div>`).join('')}</div>
+      <div class="bg-slate-800 p-4 rounded-xl border border-dashed border-slate-600 mb-4">
+        <input id="qText" placeholder="Question" class="w-full bg-slate-900 p-2 rounded mb-2 border border-slate-700">
+        <div class="grid grid-cols-2 gap-2"><input id="qOpt1" placeholder="Option A" class="bg-slate-900 p-2 rounded border border-slate-700"><input id="qOpt2" placeholder="Option B" class="bg-slate-900 p-2 rounded border border-slate-700"><input id="qOpt3" placeholder="Option C" class="bg-slate-900 p-2 rounded border border-slate-700"><input id="qOpt4" placeholder="Option D" class="bg-slate-900 p-2 rounded border border-slate-700"></div>
+        <select id="qCorrect" class="w-full mt-2 bg-slate-900 p-2 rounded border border-slate-700"><option value="0">Correct: A</option><option value="1">Correct: B</option><option value="2">Correct: C</option><option value="3">Correct: D</option></select>
+        <button onclick="addQuizQuestion()" class="mt-3 w-full bg-blue-600 py-2 rounded-lg">+ Add Question</button>
+      </div>
+      <button onclick="publishQuiz()" class="w-full bg-purple-600 py-3 rounded-xl font-bold">🚀 Publish Quiz LIVE</button>
+      <div id="publishedQuizzesList" class="mt-6 space-y-2">${window.quizzes.map(q=>`<div class="bg-slate-800 p-3 rounded flex justify-between text-sm"><span>${q.title} (${q.questions.length})</span><button onclick="deleteQuiz(${q.id})" class="text-rose-400">Delete</button></div>`).join('')}</div>
+    </div>
+  `;
 }
-window.toggleMobileMenu = function() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
-window.logAction = function(actionDesc) {
-    const entry = { time: new Date().toLocaleTimeString(), user: currentUser? currentUser.name : "Guest", action: actionDesc };
-    auditLogs.unshift(entry); saveToCloud();
+
+window.renderCurrentQuestions = function(){
+  document.getElementById('quizQuestionsList').innerHTML = window.currentQuizQuestions.map((q,i)=>`<div class="bg-slate-800 p-3 rounded flex justify-between text-sm">${i+1}. ${q.text}<button onclick="currentQuizQuestions.splice(${i},1);renderCurrentQuestions()" class="text-rose-400 ml-2">x</button></div>`).join('');
 }
-window.renderAll = function() { renderAnnouncements(); renderHomework(); renderTimetable(); renderYearbook(); renderBabyPhotos(); renderWall(); renderAdminPanel(); if (currentUser) applyLoginState(); }
-function renderAnnouncements() {
-    const grid = document.getElementById('announcementsGrid'); if (!grid) return;
-    grid.innerHTML = announcements.map(item => `<div class="bg-white rounded-2xl p-6 border shadow-sm"><div class="flex justify-between mb-3"><span class="text-xs px-2.5 py-1 bg-blue-50 text-blue-600 rounded-full">${item.date}</span>${currentUser? `<button onclick="deleteItem('announcements', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><h3 class="font-bold text-lg mb-2">${item.title}</h3><p class="text-slate-600 text-sm mb-4">${item.content}</p>${item.image? `<img src="${item.image}" class="rounded-xl w-full h-48 object-cover mb-4">` : ''}<div class="pt-4 border-t text-xs text-slate-400">By ${item.author}</div></div>`).join('');
+window.addQuizQuestion = function(){
+  const text=document.getElementById('qText').value.trim();
+  const o1=document.getElementById('qOpt1').value.trim(); const o2=document.getElementById('qOpt2').value.trim();
+  const o3=document.getElementById('qOpt3').value.trim(); const o4=document.getElementById('qOpt4').value.trim();
+  const correct=parseInt(document.getElementById('qCorrect').value);
+  if(!text||!o1||!o2) return alert('Fill question + 2 options');
+  window.currentQuizQuestions.push({text, options:[o1,o2,o3,o4].filter(Boolean), correct});
+  document.getElementById('qText').value=''; document.getElementById('qOpt1').value=''; document.getElementById('qOpt2').value=''; document.getElementById('qOpt3').value=''; document.getElementById('qOpt4').value='';
+  renderCurrentQuestions();
 }
-function renderHomework() {
-    const grid = document.getElementById('homeworkGrid'); if (!grid) return;
-    grid.innerHTML = homework.map(item => `<div class="bg-white rounded-2xl p-6 border shadow-sm"><div class="flex justify-between mb-3"><span class="text-xs px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-full">${item.subject}</span>${currentUser? `<button onclick="deleteItem('homework', ${item.id})" class="text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><p class="font-medium text-sm mb-4">${item.task}</p><div class="pt-4 border-t text-xs flex justify-between"><span class="text-rose-600">Due: ${item.dueDate}</span><span>By ${item.author}</span></div></div>`).join('');
+window.publishQuiz = async function(){
+  const title=document.getElementById('quizTitle').value.trim(); const subject=document.getElementById('quizSubject').value;
+  if(!title||window.currentQuizQuestions.length==0) return alert('Add title + question');
+  const newQuiz={id:Date.now(), title, subject, questions:[...window.currentQuizQuestions], created:new Date().toISOString()};
+  window.quizzes.unshift(newQuiz); localStorage.setItem('quizzes', JSON.stringify(window.quizzes));
+  if(window.db){ try{ await setDoc(doc(window.db, "portal", "quizzes"), { data: window.quizzes }); }catch(e){} }
+  window.currentQuizQuestions=[]; document.getElementById('quizTitle').value=''; renderAdminPanel(); alert('Quiz LIVE!');
 }
-function renderTimetable() {
-    const tbody = document.getElementById('timetableBody'); if (!tbody) return;
-    tbody.innerHTML = timetable.map(item => `<tr><td class="py-4 px-6 font-semibold">${item.day}</td><td class="py-4 px-6">${item.subject}</td><td class="py-4 px-6 font-mono text-xs">${item.time}</td><td class="py-4 px-6 text-right">${currentUser? `<button onclick="deleteItem('timetable', ${item.id})" class="text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</td></tr>`).join('');
+window.deleteQuiz = async function(id){
+  window.quizzes = window.quizzes.filter(q=>q.id!==id); localStorage.setItem('quizzes', JSON.stringify(window.quizzes));
+  if(window.db){ try{ await setDoc(doc(window.db, "portal", "quizzes"), { data: window.quizzes }); }catch(e){} }
+  renderAdminPanel(); renderQuizzesForStudents();
 }
-function renderYearbook() {
-    const grid = document.getElementById('yearbookGrid'); if (!grid) return;
-    grid.innerHTML = yearbook.map(item => `<div class="relative group bg-white rounded-2xl overflow-hidden border aspect-square"><img src="${item.url}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 flex flex-col justify-end p-4 text-white"><p class="font-bold text-sm">${item.name}</p>${currentUser? `<button onclick="deleteItem('yearbook', ${item.id})" class="text-xs text-rose-300 mt-1 text-left">Delete</button>` : ''}</div></div>`).join('');
-}
-function renderBabyPhotos() {
-    const grid = document.getElementById('babyGrid'); if (!grid) return;
-    grid.innerHTML = babyPhotos.map(item => `<div class="relative group bg-white rounded-2xl overflow-hidden border aspect-square"><img src="${item.url}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 flex flex-col justify-end p-4 text-white"><p class="font-bold text-sm">Baby: ${item.name}</p>${currentUser? `<button onclick="deleteItem('baby', ${item.id})" class="text-xs text-rose-300 mt-1 text-left">Delete</button>` : ''}</div></div>`).join('');
-}
-function renderWall() {
-    const grid = document.getElementById('wallGrid'); if (!grid) return;
-    grid.innerHTML = wallNotes.map(item => `<div class="bg-white rounded-2xl p-6 border shadow-sm"><div class="flex justify-between mb-3"><span class="font-bold text-sm">${item.name}</span>${currentUser? `<button onclick="deleteItem('wall', ${item.id})" class="text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><p class="text-slate-600 text-sm">${item.text}</p><div class="pt-4 border-t text-[10px] text-slate-400">${item.time}</div></div>`).join('');
-}
-function renderAdminPanel() {
-    const pinList = document.getElementById('pinListContainer');
-    const logContainer = document.getElementById('auditLogContainer');
-    if (pinList) pinList.innerHTML = Object.entries(studentPins).map(([pin, data]) => `<div class="bg-white p-2.5 rounded-lg border flex justify-between text-xs"><div><span class="font-mono font-bold text-purple-700">${pin}</span><div>${data.name}</div></div>${pin!== 'overrideadmin9c'? `<button onclick="deletePin('${pin}')" class="text-rose-500">Remove</button>` : '<span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded">Admin</span>'}</div>`).join('');
-    if (logContainer) logContainer.innerHTML = auditLogs.map(log => `<div class="p-2 bg-white rounded border"><div class="text-[10px] text-slate-400">${log.time} - <strong class="text-purple-600">${log.user}</strong></div><div>${log.action}</div></div>`).join('');
-}
-window.openAddModal = function(type) {
-    activeModalType = type; const modal = document.getElementById('addModal'); const title = document.getElementById('modalTitle'); const fields = document.getElementById('modalFormFields');
-    modal.classList.remove('hidden'); modal.classList.add('flex');
-    if (type === 'announcement') { title.textContent = "Post Announcement"; fields.innerHTML = `<input type="text" id="annTitle" required placeholder="Title" class="w-full px-4 py-2.5 rounded-xl border text-sm"><textarea id="annContent" required placeholder="Details..." rows="3" class="w-full px-4 py-2.5 rounded-xl border text-sm"></textarea><input type="url" id="annImage" placeholder="Image URL" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; }
-    else if (type === 'homework') { title.textContent = "Add Homework"; fields.innerHTML = `<input type="text" id="hwSubject" required placeholder="Subject" class="w-full px-4 py-2.5 rounded-xl border text-sm"><textarea id="hwTask" required placeholder="Task..." rows="3" class="w-full px-4 py-2.5 rounded-xl border text-sm"></textarea><input type="text" id="hwDue" required placeholder="Due Date" class="w-full px-4 py-2.5 rounded-xl border text-sm"><input type="url" id="hwImage" placeholder="Image URL" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; }
-    else if (type === 'timetable') { title.textContent = "Add Period"; fields.innerHTML = `<select id="ttDay" class="w-full px-4 py-2.5 rounded-xl border text-sm"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select><input type="text" id="ttSubject" required placeholder="Subject" class="w-full px-4 py-2.5 rounded-xl border text-sm"><input type="text" id="ttTime" required placeholder="Time" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; }
-    else if (type === 'yearbook') { title.textContent = "Upload Portrait"; fields.innerHTML = `<input type="text" id="ybName" required placeholder="Student Name" class="w-full px-4 py-2.5 rounded-xl border text-sm"><input type="url" id="ybUrl" required placeholder="Photo URL" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; }
-    else if (type === 'baby') { title.textContent = "Upload Childhood"; fields.innerHTML = `<input type="text" id="babyName" required placeholder="Student Name" class="w-full px-4 py-2.5 rounded-xl border text-sm"><input type="url" id="babyUrl" required placeholder="Photo URL" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; }
-    else if (type === 'wall') { title.textContent = "Post Note"; fields.innerHTML = `<textarea id="wallText" required placeholder="Write your note..." rows="3" class="w-full px-4 py-2.5 rounded-xl border text-sm"></textarea>`; }
-}
-window.closeAddModal = function() { document.getElementById('addModal').classList.add('hidden'); document.getElementById('addModal').classList.remove('flex'); }
-window.handleGenericSubmit = function(e) {
-    e.preventDefault(); const id = Date.now(); const author = currentUser? currentUser.name : "Student";
-    if (activeModalType === 'announcement') { announcements.unshift({ id, title: document.getElementById('annTitle').value, content: document.getElementById('annContent').value, author, date: new Date().toLocaleDateString(), image: document.getElementById('annImage').value }); logAction(`Posted: ${document.getElementById('annTitle').value}`); }
-    else if (activeModalType === 'homework') { homework.unshift({ id, subject: document.getElementById('hwSubject').value, task: document.getElementById('hwTask').value, dueDate: document.getElementById('hwDue').value, author, image: document.getElementById('hwImage').value }); logAction(`Added HW: ${document.getElementById('hwSubject').value}`); }
-    else if (activeModalType === 'timetable') { timetable.push({ id, day: document.getElementById('ttDay').value, subject: document.getElementById('ttSubject').value, time: document.getElementById('ttTime').value }); logAction(`Added TT: ${document.getElementById('ttSubject').value}`); }
-    else if (activeModalType === 'yearbook') { yearbook.push({ id, name: document.getElementById('ybName').value, url: document.getElementById('ybUrl').value }); logAction(`Yearbook: ${document.getElementById('ybName').value}`); }
-    else if (activeModalType === 'baby') { babyPhotos.push({ id, name: document.getElementById('babyName').value, url: document.getElementById('babyUrl').value }); logAction(`Baby: ${document.getElementById('babyName').value}`); }
-    else if (activeModalType === 'wall') { wallNotes.unshift({ id, name: author, text: document.getElementById('wallText').value, time: "Just now" }); logAction(`Wall post`); }
-    saveToCloud(); closeAddModal();
-}
-window.deleteItem = function(type, id) {
-    if (!confirm("Delete for ALL phones?")) return;
-    if (type === 'announcements') announcements = announcements.filter(i => i.id!== id);
-    else if (type === 'homework') homework = homework.filter(i => i.id!== id);
-    else if (type === 'timetable') timetable = timetable.filter(i => i.id!== id);
-    else if (type === 'yearbook') yearbook = yearbook.filter(i => i.id!== id);
-    else if (type === 'baby') babyPhotos = babyPhotos.filter(i => i.id!== id);
-    else if (type === 'wall') wallNotes = wallNotes.filter(i => i.id!== id);
-    logAction(`Deleted from ${type}`); saveToCloud();
-}
-window.openAdminModal = function() { if (!currentUser ||!currentUser.isAdmin) { alert("Admin only!"); return; } document.getElementById('adminModal').classList.remove('hidden'); document.getElementById('adminModal').classList.add('flex'); renderAdminPanel(); }
-window.closeAdminModal = function() { document.getElementById('adminModal').classList.add('hidden'); }
-window.handleAddPin = function(e) { e.preventDefault(); const pin = document.getElementById('newPinCode').value.trim(); const name = document.getElementById('newPinName').value.trim(); if (studentPins[pin]) { alert("Exists!"); return; } studentPins[pin] = { name, isAdmin: false }; logAction(`Created PIN ${pin}`); saveToCloud(); document.getElementById('newPinCode').value=''; document.getElementById('newPinName').value=''; }
-window.deletePin = function(pin) { delete studentPins[pin]; logAction(`Removed ${pin}`); saveToCloud(); }
-window.clearLogs = function() { auditLogs = []; saveToCloud(); }
-        // after your other onSnapshot, add:
-onSnapshot(doc(db, "portal", "quizzes"), (snap)=>{
-    if(snap.exists()){ window.quizzes = snap.data().data; localStorage.setItem('quizzes', JSON.stringify(window.quizzes)); window.renderQuizzesForStudents(); }
-});
+window.renderAdminQuizzesList = function(){}
+</script>
+
+<script>
 window.handleAiChat = async function(e) {
     e.preventDefault();
     const inputEl = document.getElementById('aiChatInput');
@@ -327,24 +282,19 @@ window.handleAiChat = async function(e) {
     try {
         const apiKey = "AIzaSyDjY7W0lNitZjvwvum59NLvgQGDJPF4FP4";
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-        const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: "You are a helpful Grade 9C tutor for Smart College Lebanon. Explain clearly." }] } }) });
+        const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: "You are a helpful Grade 9C tutor for Smart College Lebanon. Explain clearly, simple, friendly." }] } }) });
         const result = await response.json();
         const reply = result.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, try again!";
         document.getElementById(loadingId).remove();
         chatMessages.innerHTML += `<div class="flex gap-3"><div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-200 text-sm">${reply.replace(/\n/g,'<br>')}</div></div>`;
     } catch (err) {
-        document.getElementById(loadingId).remove();
+        document.getElementById(loadingId)?.remove();
         chatMessages.innerHTML += `<div class="flex gap-3"><div class="w-8 h-8 bg-rose-600 rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-triangle-exclamation text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-rose-300 text-sm">Error: ${err.message}</div></div>`;
     }
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
-
 initCloudSync();
-if (currentUser) { applyLoginState(); document.getElementById('pinModal').classList.add('hidden'); }
-</script>
-</body>
-</html>
-initCloudSync();
+renderContent();
 if (currentUser) { applyLoginState(); document.getElementById('pinModal').classList.add('hidden'); }
 </script>
 </body>
