@@ -66,6 +66,7 @@
             <a href="#projects" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Projects</a>
             <a href="#ai-tutor" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-purple-600 dark:text-purple-400">AI Tutor</a>
             <button onclick="openChatModal(); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-sky-700 bg-sky-50 dark:bg-sky-900/30 dark:text-sky-400"><i class="fa-solid fa-comments"></i> Live Chat</button>
+            <div id="mobileAdminContainer" class="pt-2 border-t hidden"><button onclick="openAdminModal(); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-purple-700 bg-purple-50 dark:bg-purple-900/30">Admin Panel & Logbook</button></div>
             <button onclick="logout()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-slate-800"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
         </div>
     </header>
@@ -85,7 +86,6 @@
         
         <section id="homework" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2 dark:text-white"><i class="fa-solid fa-book-bookmark text-indigo-600"></i> Homework</h2><p class="text-sm text-slate-500 dark:text-slate-400">Upcoming assignments</p></div><button onclick="openAddModal('homework')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-plus"></i> Add</button></div><div id="homeworkGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
         
-        <!-- NEW PROJECTS & WORKSHEETS SECTION -->
         <section id="projects" class="scroll-mt-28">
             <div class="flex items-center justify-between mb-8">
                 <div>
@@ -130,7 +130,30 @@
 
     <footer class="bg-white dark:bg-slate-900 border-t dark:border-slate-800 py-8 px-4 mt-auto transition-colors duration-300"><div class="max-w-7xl mx-auto flex justify-between text-sm text-slate-500 dark:text-slate-400"><div>© 2026 Smart College • Grade 9C</div><div id="footerUserStatus" class="font-mono text-xs"></div></div></footer>
 
-    <div id="adminModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-start justify-center p-4 overflow-y-auto overscroll-contain"><div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8 max-h-[90vh] flex flex-col overflow-hidden"><div class="flex items-center justify-between pb-4 border-b dark:border-slate-700 mb-6 shrink-0"><div><h3 class="text-xl font-bold flex items-center gap-2 dark:text-white"><i class="fa-solid fa-shield-halved text-purple-600"></i> Admin Control</h3></div><button onclick="closeAdminModal()" class="text-slate-400 p-2"><i class="fa-solid fa-xmark"></i></button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 overflow-hidden min-h-0"><div class="bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600 flex flex-col overflow-hidden min-h-0"><h4 class="font-bold text-sm mb-3 dark:text-white shrink-0"><i class="fa-solid fa-key"></i> PIN Manager</h4><form onsubmit="handleAddPin(event)" class="space-y-3 mb-4 shrink-0"><input type="text" id="newPinCode" required placeholder="PIN (e.g., 9c-31)" class="w-full px-3 py-2 rounded-lg border dark:border-slate-600 dark:bg-slate-800 dark:text-white text-sm"><input type="text" id="newPinName" required placeholder="Student Full Name" class="w-full px-3 py-2 rounded-lg border dark:border-slate-600 dark:bg-slate-800 dark:text-white text-sm"><button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg text-xs">Add New PIN</button></form><div id="pinListContainer" class="overflow-y-auto space-y-2 pr-1 flex-1 min-h-[150px]"></div></div><div class="md:col-span-2 bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600 flex flex-col overflow-hidden min-h-0"><div class="flex justify-between mb-3 shrink-0"><h4 class="font-bold text-sm dark:text-white"><i class="fa-solid fa-book-tanakh"></i> Audit Logbook</h4><button onclick="clearLogs()" class="text-xs text-rose-600">Clear</button></div><div id="auditLogContainer" class="overflow-y-auto space-y-2.5 font-mono text-xs flex-1 min-h-[200px] overscroll-contain"></div></div></div></div></div>
+    <div id="adminModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-start justify-center p-4 overflow-y-auto overscroll-contain">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8 max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex items-center justify-between pb-4 border-b dark:border-slate-700 mb-6 shrink-0">
+                <div><h3 class="text-xl font-bold flex items-center gap-2 dark:text-white"><i class="fa-solid fa-shield-halved text-purple-600"></i> Admin Control</h3></div>
+                <button onclick="closeAdminModal()" class="text-slate-400 p-2"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <!-- ADDED AI CONFIG SECTION -->
+            <div class="bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600 mb-6 shrink-0">
+                <h4 class="font-bold text-sm mb-3 dark:text-white"><i class="fa-solid fa-key"></i> AI Secret Vault (Protects API Key from Bots)</h4>
+                <div class="flex gap-2">
+                    <input type="password" id="adminApiKeyInput" placeholder="Paste new Gemini API Key here..." class="flex-grow px-3 py-2 rounded-lg border dark:border-slate-600 dark:bg-slate-800 dark:text-white text-sm">
+                    <button onclick="saveApiKey()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">Save Key</button>
+                </div>
+                <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-2">Saving it here hides it in the database so GitHub bots can't deactivate it.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 overflow-hidden min-h-0">
+                <div class="bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600 flex flex-col overflow-hidden min-h-0"><h4 class="font-bold text-sm mb-3 dark:text-white shrink-0"><i class="fa-solid fa-users"></i> PIN Manager</h4><form onsubmit="handleAddPin(event)" class="space-y-3 mb-4 shrink-0"><input type="text" id="newPinCode" required placeholder="PIN (e.g., 9c-31)" class="w-full px-3 py-2 rounded-lg border dark:border-slate-600 dark:bg-slate-800 dark:text-white text-sm"><input type="text" id="newPinName" required placeholder="Student Full Name" class="w-full px-3 py-2 rounded-lg border dark:border-slate-600 dark:bg-slate-800 dark:text-white text-sm"><button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg text-xs font-semibold">Add New PIN</button></form><div id="pinListContainer" class="overflow-y-auto space-y-2 pr-1 flex-1 min-h-[150px]"></div></div>
+                <div class="md:col-span-2 bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600 flex flex-col overflow-hidden min-h-0"><div class="flex justify-between mb-3 shrink-0"><h4 class="font-bold text-sm dark:text-white"><i class="fa-solid fa-book-tanakh"></i> Audit Logbook</h4><button onclick="clearLogs()" class="text-xs text-rose-600">Clear</button></div><div id="auditLogContainer" class="overflow-y-auto space-y-2.5 font-mono text-xs flex-1 min-h-[200px] overscroll-contain"></div></div>
+            </div>
+        </div>
+    </div>
+    
     <div id="addModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4"><div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6 border dark:border-slate-700"><div class="flex justify-between pb-4 border-b dark:border-slate-700 mb-6"><h3 id="modalTitle" class="text-xl font-bold dark:text-white">Add Item</h3><button onclick="closeAddModal()" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button></div><form id="genericAddForm" onsubmit="handleGenericSubmit(event)" class="space-y-4"><div id="modalFormFields"></div><button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl text-sm">Save & Post LIVE</button></form></div></div>
 
     <div id="chatModal" class="fixed inset-0 z-[60] bg-slate-900/80 backdrop-blur-sm hidden items-start justify-center p-4 overflow-y-auto">
@@ -167,7 +190,10 @@ window.initCloudSync = function(){
   const status = document.getElementById('syncStatus');
   if(!db){ status.textContent='● Offline mode'; return; }
   status.textContent='● Live sync active - all phones connected';
-  const collections = ['grade9c_announcements','grade9c_homework','grade9c_projects','grade9c_timetable','grade9c_yearbook','grade9c_baby','grade9c_wall','grade9c_pins','grade9c_logs','grade9c_chat'];
+  
+  // ADDED grade9c_config for secure API Key storage
+  const collections = ['grade9c_announcements','grade9c_homework','grade9c_projects','grade9c_timetable','grade9c_yearbook','grade9c_baby','grade9c_wall','grade9c_pins','grade9c_logs','grade9c_chat', 'grade9c_config'];
+  
   collections.forEach(col => {
     onSnapshot(doc(db, "portal", col), (snap)=>{
       if(snap.exists()){
@@ -182,6 +208,7 @@ window.initCloudSync = function(){
         if(col==='grade9c_pins') { studentPins = snap.data().data; renderAdminPanel(); }
         if(col==='grade9c_logs') { auditLogs = snap.data().data; renderAdminPanel(); }
         if(col==='grade9c_chat') { chatMessagesData = snap.data().data; renderChatMessages(); }
+        if(col==='grade9c_config') { configData = snap.data().data; } // Load secret config
       }
     });
   });
@@ -231,6 +258,7 @@ let yearbook = JSON.parse(localStorage.getItem('grade9c_yearbook')) || [{ id: 1,
 let babyPhotos = JSON.parse(localStorage.getItem('grade9c_baby')) || [{ id: 1, name: "Fatima Zein", url: "https://placehold.co/400x400/db2777/ffffff?text=Baby" }];
 let wallNotes = JSON.parse(localStorage.getItem('grade9c_wall')) || [{ id: 1, name: "Hassan Fakih", text: "Good luck exams!", time: "Today" }];
 let chatMessagesData = JSON.parse(localStorage.getItem('grade9c_chat')) || [];
+let configData = JSON.parse(localStorage.getItem('grade9c_config')) || { geminiApiKey: "" }; // Store API key securely here
 let activeModalType = '';
 
 window.onload = function() {
@@ -262,7 +290,22 @@ function renderYearbook(){ document.getElementById('yearbookGrid').innerHTML = y
 function renderBabyPhotos(){ document.getElementById('babyGrid').innerHTML = babyPhotos.map(item => `<div class="relative group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border dark:border-slate-700 aspect-square"><img src="${item.url}" class="w-full h-full object-cover group-hover:scale-105 transition"><div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 text-white"><p class="font-bold text-sm">Baby: ${item.name}</p>${currentUser? `<button onclick="deleteItem('baby', ${item.id})" class="text-xs text-rose-300 mt-1 text-left">Delete</button>` : ''}</div></div>`).join(''); }
 function renderWall(){ document.getElementById('wallGrid').innerHTML = wallNotes.map(item => `<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border dark:border-slate-700 shadow-sm"><div class="flex justify-between mb-3"><span class="font-bold text-sm dark:text-white">${item.name}</span>${currentUser? `<button onclick="deleteItem('wall', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><p class="text-slate-600 dark:text-slate-300 text-sm">${item.text}</p><div class="pt-4 border-t dark:border-slate-700 text-[10px] text-slate-400 mt-4">${item.time}</div></div>`).join(''); }
 
-function renderAdminPanel(){ document.getElementById('pinListContainer').innerHTML = Object.entries(studentPins).map(([pin, data]) => `<div class="bg-white dark:bg-slate-800 p-2.5 rounded-lg border dark:border-slate-600 flex justify-between text-xs"><div><span class="font-mono font-bold text-purple-700 dark:text-purple-400">${pin}</span><div class="text-slate-600 dark:text-slate-300">${data.name}</div></div>${pin!== 'overrideadmin9c'? `<button onclick="deletePin('${pin}')" class="text-rose-500">Remove</button>` : '<span class="text-[10px] bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded">Admin</span>'}</div>`).join(''); document.getElementById('auditLogContainer').innerHTML = auditLogs.map(log => `<div class="p-2 bg-white dark:bg-slate-800 rounded border dark:border-slate-600"><div class="text-[10px] text-slate-400">${log.time} - <strong class="text-purple-600 dark:text-purple-400">${log.user}</strong></div><div class="text-slate-700 dark:text-slate-300 mt-0.5">${log.action}</div></div>`).join(''); }
+function renderAdminPanel(){ 
+    document.getElementById('pinListContainer').innerHTML = Object.entries(studentPins).map(([pin, data]) => `<div class="bg-white dark:bg-slate-800 p-2.5 rounded-lg border dark:border-slate-600 flex justify-between text-xs"><div><span class="font-mono font-bold text-purple-700 dark:text-purple-400">${pin}</span><div class="text-slate-600 dark:text-slate-300">${data.name}</div></div>${pin!== 'overrideadmin9c'? `<button onclick="deletePin('${pin}')" class="text-rose-500">Remove</button>` : '<span class="text-[10px] bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded">Admin</span>'}</div>`).join(''); 
+    document.getElementById('auditLogContainer').innerHTML = auditLogs.map(log => `<div class="p-2 bg-white dark:bg-slate-800 rounded border dark:border-slate-600"><div class="text-[10px] text-slate-400">${log.time} - <strong class="text-purple-600 dark:text-purple-400">${log.user}</strong></div><div class="text-slate-700 dark:text-slate-300 mt-0.5">${log.action}</div></div>`).join(''); 
+    document.getElementById('adminApiKeyInput').value = configData.geminiApiKey ? "********" : ""; // mask it if it exists
+}
+
+// Function to save API key to database
+window.saveApiKey = async function() {
+    const key = document.getElementById('adminApiKeyInput').value.trim();
+    if(key === "" || key === "********") return;
+    configData.geminiApiKey = key;
+    await window.syncToCloud('grade9c_config', configData);
+    alert("API Key saved securely to the database!");
+    document.getElementById('adminApiKeyInput').value = "********";
+}
+
 function renderChatMessages(){ const box = document.getElementById('chatMessages'); if(!box) return; if(chatMessagesData.length===0){ box.innerHTML = `<div class="text-center py-12 text-slate-400 dark:text-slate-500 text-sm"><i class="fa-solid fa-comments text-2xl mb-2 block"></i>No messages yet. Be first to say hi! 👋</div>`; return; } box.innerHTML = chatMessagesData.map(m => { const isMe = currentUser && m.pin === currentUser.pin; return `<div class="flex flex-col ${isMe? 'items-end' : 'items-start'}"><div class="max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${isMe? 'bg-sky-600 text-white rounded-br-sm' : 'bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm rounded-bl-sm dark:text-white'}"><div class="font-bold text-[11px] ${isMe? 'text-white/70' : 'text-sky-600 dark:text-sky-400'} mb-0.5">${m.name.replace(/</g,'&lt;')} ${isMe? '(You)' : ''}</div><div class="leading-snug">${m.text.replace(/</g,'&lt;')}</div><div class="text-[10px] opacity-60 mt-1">${m.timeStr || ''}</div></div></div>`; }).join(''); box.scrollTop = box.scrollHeight; }
 
 async function sendChatMessage(){ const input = document.getElementById('chatInput'); const text = input.value.trim(); if(!text) return; if(!currentUser){ alert('Login first'); return; } const msg = { id: Date.now(), name: currentUser.name, pin: currentUser.pin, text: text, time: Date.now(), timeStr: new Date().toLocaleTimeString() }; chatMessagesData.push(msg); if(chatMessagesData.length>200) chatMessagesData = chatMessagesData.slice(-200); await window.syncToCloud('grade9c_chat', chatMessagesData); logAction(`Sent LIVE CHAT: "${text}" | Name: ${currentUser.name}`); input.value = ''; renderChatMessages(); }
@@ -321,7 +364,9 @@ async function handleAiChat(e) {
     chatMessages.innerHTML += `<div id="${loadingId}" class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-300 animate-pulse">Thinking...</div></div>`;
     chatMessages.scrollTop = chatMessages.scrollHeight;
     try {
-        const GEMINI_API_KEY = "AQ.Ab8RN6I6fvjzOXaRSDjxSSUvvTA8OGAmxsnajbhOybC83Qzzpw";
+        // FETCHING KEY FROM DATABASE INSTEAD OF HTML
+        if (!configData.geminiApiKey) { throw new Error("Admin has not saved the API key in the Admin Panel yet!"); }
+        const GEMINI_API_KEY = configData.geminiApiKey;
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
         const response = await fetch(apiUrl, {
             method: 'POST',
@@ -347,7 +392,9 @@ async function generateQuiz(subject) {
     const outputEl = document.getElementById('quizOutput');
     outputEl.innerHTML = `<div class="text-purple-300 animate-pulse py-4">Generating 3-question quiz for ${subject}...</div>`;
     try {
-        const GEMINI_API_KEY = "AQ.Ab8RN6I6fvjzOXaRSDjxSSUvvTA8OGAmxsnajbhOybC83Qzzpw";
+        // FETCHING KEY FROM DATABASE INSTEAD OF HTML
+        if (!configData.geminiApiKey) { throw new Error("Admin has not saved the API key in the Admin Panel yet!"); }
+        const GEMINI_API_KEY = configData.geminiApiKey;
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
         const response = await fetch(apiUrl, {
             method: 'POST',
