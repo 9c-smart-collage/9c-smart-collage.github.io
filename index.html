@@ -322,7 +322,7 @@ async function handleAiChat(e) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
     try {
         const GEMINI_API_KEY = "AQ.Ab8RN6I6fvjzOXaRSDjxSSUvvTA8OGAmxsnajbhOybC83Qzzpw";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -348,7 +348,7 @@ async function generateQuiz(subject) {
     outputEl.innerHTML = `<div class="text-purple-300 animate-pulse py-4">Generating 3-question quiz for ${subject}...</div>`;
     try {
         const GEMINI_API_KEY = "AQ.Ab8RN6I6fvjzOXaRSDjxSSUvvTA8OGAmxsnajbhOybC83Qzzpw";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
