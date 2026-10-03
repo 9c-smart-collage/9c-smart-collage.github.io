@@ -137,7 +137,6 @@
                 <button onclick="closeAdminModal()" class="text-slate-400 p-2"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <!-- ADDED AI CONFIG SECTION -->
             <div class="bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600 mb-6 shrink-0">
                 <h4 class="font-bold text-sm mb-3 dark:text-white"><i class="fa-solid fa-key"></i> AI Secret Vault (Protects API Key from Bots)</h4>
                 <div class="flex gap-2">
@@ -191,7 +190,6 @@ window.initCloudSync = function(){
   if(!db){ status.textContent='● Offline mode'; return; }
   status.textContent='● Live sync active - all phones connected';
   
-  // ADDED grade9c_config for secure API Key storage
   const collections = ['grade9c_announcements','grade9c_homework','grade9c_projects','grade9c_timetable','grade9c_yearbook','grade9c_baby','grade9c_wall','grade9c_pins','grade9c_logs','grade9c_chat', 'grade9c_config'];
   
   collections.forEach(col => {
@@ -208,7 +206,7 @@ window.initCloudSync = function(){
         if(col==='grade9c_pins') { studentPins = snap.data().data; renderAdminPanel(); }
         if(col==='grade9c_logs') { auditLogs = snap.data().data; renderAdminPanel(); }
         if(col==='grade9c_chat') { chatMessagesData = snap.data().data; renderChatMessages(); }
-        if(col==='grade9c_config') { configData = snap.data().data; } // Load secret config
+        if(col==='grade9c_config') { configData = snap.data().data; } 
       }
     });
   });
@@ -258,7 +256,7 @@ let yearbook = JSON.parse(localStorage.getItem('grade9c_yearbook')) || [{ id: 1,
 let babyPhotos = JSON.parse(localStorage.getItem('grade9c_baby')) || [{ id: 1, name: "Fatima Zein", url: "https://placehold.co/400x400/db2777/ffffff?text=Baby" }];
 let wallNotes = JSON.parse(localStorage.getItem('grade9c_wall')) || [{ id: 1, name: "Hassan Fakih", text: "Good luck exams!", time: "Today" }];
 let chatMessagesData = JSON.parse(localStorage.getItem('grade9c_chat')) || [];
-let configData = JSON.parse(localStorage.getItem('grade9c_config')) || { geminiApiKey: "" }; // Store API key securely here
+let configData = JSON.parse(localStorage.getItem('grade9c_config')) || { geminiApiKey: "" }; 
 let activeModalType = '';
 
 window.onload = function() {
@@ -293,10 +291,9 @@ function renderWall(){ document.getElementById('wallGrid').innerHTML = wallNotes
 function renderAdminPanel(){ 
     document.getElementById('pinListContainer').innerHTML = Object.entries(studentPins).map(([pin, data]) => `<div class="bg-white dark:bg-slate-800 p-2.5 rounded-lg border dark:border-slate-600 flex justify-between text-xs"><div><span class="font-mono font-bold text-purple-700 dark:text-purple-400">${pin}</span><div class="text-slate-600 dark:text-slate-300">${data.name}</div></div>${pin!== 'overrideadmin9c'? `<button onclick="deletePin('${pin}')" class="text-rose-500">Remove</button>` : '<span class="text-[10px] bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded">Admin</span>'}</div>`).join(''); 
     document.getElementById('auditLogContainer').innerHTML = auditLogs.map(log => `<div class="p-2 bg-white dark:bg-slate-800 rounded border dark:border-slate-600"><div class="text-[10px] text-slate-400">${log.time} - <strong class="text-purple-600 dark:text-purple-400">${log.user}</strong></div><div class="text-slate-700 dark:text-slate-300 mt-0.5">${log.action}</div></div>`).join(''); 
-    document.getElementById('adminApiKeyInput').value = configData.geminiApiKey ? "********" : ""; // mask it if it exists
+    document.getElementById('adminApiKeyInput').value = configData.geminiApiKey ? "********" : ""; 
 }
 
-// Function to save API key to database
 window.saveApiKey = async function() {
     const key = document.getElementById('adminApiKeyInput').value.trim();
     if(key === "" || key === "********") return;
@@ -364,7 +361,6 @@ async function handleAiChat(e) {
     chatMessages.innerHTML += `<div id="${loadingId}" class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-300 animate-pulse">Thinking...</div></div>`;
     chatMessages.scrollTop = chatMessages.scrollHeight;
     try {
-        // FETCHING KEY FROM DATABASE INSTEAD OF HTML
         if (!configData.geminiApiKey) { throw new Error("Admin has not saved the API key in the Admin Panel yet!"); }
         const GEMINI_API_KEY = configData.geminiApiKey;
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_API_KEY}`;
@@ -388,27 +384,86 @@ async function handleAiChat(e) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
+// ----------------------------------------------------------------------
+// NEW INTERACTIVE QUIZ GENERATOR CODE 
+// ----------------------------------------------------------------------
 async function generateQuiz(subject) {
     const outputEl = document.getElementById('quizOutput');
-    outputEl.innerHTML = `<div class="text-purple-300 animate-pulse py-4">Generating 3-question quiz for ${subject}...</div>`;
+    outputEl.innerHTML = `<div class="text-purple-300 animate-pulse py-4">Generating interactive 3-question quiz for ${subject}...</div>`;
     try {
-        // FETCHING KEY FROM DATABASE INSTEAD OF HTML
         if (!configData.geminiApiKey) { throw new Error("Admin has not saved the API key in the Admin Panel yet!"); }
         const GEMINI_API_KEY = configData.geminiApiKey;
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_API_KEY}`;
+        
+        // We now ask Gemini to strictly output structured JSON data instead of text
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: `Create 3 multiple choice quiz questions for Grade 9 ${subject} with options A,B,C,D and correct answer. Format nicely with HTML.` }] }],
-                systemInstruction: { parts: [{ text: "You are a Grade 9C quiz maker. Create clear quizzes." }] }
+                contents: [{ parts: [{ text: `Create 3 multiple choice quiz questions for Grade 9 ${subject}. Return ONLY a raw JSON array of objects. Each object must have exactly: "question" (string), "options" (array of 4 strings), and "answer" (string, must exactly match one of the options). Do not include any extra text.` }] }],
+                systemInstruction: { parts: [{ text: "You output ONLY valid JSON without any markdown formatting wrappers." }] }
             })
         });
         const result = await response.json();
         if(result.error) throw new Error(result.error.message);
-        const reply = result.candidates?.[0]?.content?.parts?.[0]?.text || "Could not generate quiz.";
-        outputEl.innerHTML = `<div class="space-y-4 pt-2 whitespace-pre-wrap">${reply}</div>`;
-    } catch (err) { outputEl.innerHTML = `<div class="text-rose-400">Failed: ${err.message}</div>`; }
+        
+        // Get the AI text and clean off any formatting it accidentally left behind
+        let reply = result.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        reply = reply.replace(/```json/gi, '').replace(/```/g, '').trim();
+        
+        // Convert the text into real JavaScript data
+        const quizData = JSON.parse(reply);
+        
+        // Build the interactive HTML
+        let html = '<div class="space-y-5 mt-4">';
+        quizData.forEach((q, i) => {
+            html += `<div class="bg-slate-800/80 border border-slate-700 p-5 rounded-2xl shadow-sm">
+                <h4 class="font-bold text-slate-100 mb-4">${i+1}. ${q.question}</h4>
+                <div class="space-y-2">`;
+            
+            q.options.forEach(opt => {
+                const safeOpt = opt.replace(/"/g, '&quot;'); // prevent html breaks
+                const isCorrect = (opt === q.answer);
+                // Create the clickable buttons and attach our handleQuizAnswer function
+                html += `<button onclick="handleQuizAnswer(this, ${isCorrect})" data-correct="${isCorrect}" class="w-full text-left p-3 rounded-xl bg-slate-700/60 hover:bg-slate-600 border border-slate-600 transition text-sm text-slate-200">${safeOpt}</button>`;
+            });
+            html += `</div></div>`;
+        });
+        html += '</div>';
+        outputEl.innerHTML = html;
+    } catch (err) { 
+        console.error(err);
+        outputEl.innerHTML = `<div class="text-rose-400 mt-2 p-3 bg-rose-900/20 rounded-xl text-sm">Failed to generate interactive quiz. Please try again. (${err.message})</div>`; 
+    }
+}
+
+// Function that handles the button clicks for the quiz
+window.handleQuizAnswer = function(btn, isCorrect) {
+    const parent = btn.parentElement;
+    const allButtons = parent.querySelectorAll('button');
+    
+    // First, disable all buttons so they can't guess again
+    allButtons.forEach(b => {
+        b.disabled = true;
+        b.classList.remove('hover:bg-slate-600', 'cursor-pointer');
+        
+        // Always highlight the correct answer, even if they got it wrong
+        if (b.getAttribute('data-correct') === 'true') {
+            b.classList.remove('bg-slate-700/60', 'border-slate-600');
+            b.classList.add('bg-emerald-900/40', 'border-emerald-500/50', 'text-emerald-400');
+        }
+    });
+    
+    // Then, style the specific button they clicked based on right/wrong
+    if (isCorrect) {
+        btn.classList.remove('bg-emerald-900/40', 'border-emerald-500/50', 'text-emerald-400');
+        btn.classList.add('bg-emerald-600', 'border-emerald-500', 'text-white', 'font-bold');
+        btn.innerHTML += ' <i class="fa-solid fa-check ml-2"></i>';
+    } else {
+        btn.classList.remove('bg-slate-700/60', 'border-slate-600');
+        btn.classList.add('bg-rose-600', 'border-rose-500', 'text-white', 'font-bold');
+        btn.innerHTML += ' <i class="fa-solid fa-xmark ml-2"></i>';
+    }
 }
 </script>
 </body>
