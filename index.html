@@ -5,52 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart College - Grade 9C Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {} }
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>body { font-family: 'Inter', sans-serif; }</style>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        #chatMessages { scroll-behavior: smooth; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 antialiased min-h-screen flex flex-col transition-colors duration-300">
 
     <div id="pinModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-slate-100 text-center relative overflow-hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-8 border border-slate-100 dark:border-slate-700 text-center relative overflow-hidden">
             <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
-            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-5 text-2xl shadow-inner"><i class="fa-solid fa-lock"></i></div>
-            <h2 class="text-2xl font-bold text-slate-900 mb-2">Smart College Grade 9C</h2>
-            <p class="text-sm text-slate-500 mb-6">Please put your PIN tied to your account.</p>
+            <div class="w-16 h-16 bg-blue-50 dark:bg-slate-700 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-5 text-2xl shadow-inner"><i class="fa-solid fa-lock"></i></div>
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Smart College Grade 9C</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Please put your PIN tied to your account.</p>
             <form id="pinForm" onsubmit="handlePinLogin(event)" class="space-y-4">
-                <input type="password" id="pinInput" required placeholder="Enter your PIN" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-center tracking-widest font-mono text-lg bg-slate-50">
+                <input type="password" id="pinInput" required placeholder="Enter your PIN" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-600 text-center tracking-widest font-mono text-lg bg-slate-50 dark:bg-slate-700 dark:text-white">
                 <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition shadow-lg flex items-center justify-center gap-2"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter Portal</button>
             </form>
             <div id="pinError" class="mt-4 text-rose-500 text-sm hidden font-medium"></div>
         </div>
     </div>
 
-    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3"><div class="w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">9C</div><div><h1 class="font-bold text-lg text-slate-900 leading-tight">Smart College</h1><p class="text-xs text-blue-600 font-semibold uppercase">Grade 9C • Tyre, Lebanon</p></div></div>
+            <div class="flex items-center gap-3"><div class="w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">9C</div><div><h1 class="font-bold text-lg text-slate-900 dark:text-white leading-tight">Smart College</h1><p class="text-xs text-blue-600 dark:text-blue-400 font-semibold uppercase">Grade 9C • Tyre, Lebanon</p></div></div>
             <div class="hidden md:flex items-center gap-6">
                 <nav class="flex items-center gap-1">
-                    <a href="#announcements" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50">Announcements</a>
-                    <a href="#homework" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50">Homework</a>
-                    <a href="#timetable" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50">Timetable</a>
-                    <a href="#yearbook" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50">Yearbook</a>
-                    <a href="#babyphotos" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50">Childhood</a>
-                    <a href="#wall" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50">Class Wall</a>
-                    <a href="#ai-tutor" class="px-3.5 py-2 rounded-lg text-sm font-medium text-purple-600 hover:bg-purple-50 flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Tutor</a>
+                    <a href="#announcements" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800">Announcements</a>
+                    <a href="#homework" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800">Homework</a>
+                    <a href="#projects" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800">Projects</a>
+                    <a href="#yearbook" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800">Yearbook</a>
+                    <a href="#wall" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800">Class Wall</a>
+                    <a href="#ai-tutor" class="px-3.5 py-2 rounded-lg text-sm font-medium text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30 flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Tutor</a>
                 </nav>
-                <div class="flex items-center gap-3 pl-4 border-l border-slate-200">
-                    <div id="userInfoBadge" class="text-right hidden"><div id="userNameDisplay" class="text-xs font-bold text-slate-900"></div><div id="userRoleDisplay" class="text-[10px] text-blue-600 font-semibold"></div></div>
+                <div class="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-slate-700">
+                    <button onclick="toggleDarkMode()" class="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 p-2 rounded-lg"><i class="fa-solid fa-moon dark:hidden text-lg"></i><i class="fa-solid fa-sun hidden dark:block text-lg"></i></button>
+                    <div id="userInfoBadge" class="text-right hidden"><div id="userNameDisplay" class="text-xs font-bold text-slate-900 dark:text-white"></div><div id="userRoleDisplay" class="text-[10px] text-blue-600 dark:text-blue-400 font-semibold"></div></div>
                     <button onclick="openChatModal()" class="bg-sky-600 hover:bg-sky-700 text-white px-3.5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-comments"></i> Live Chat</button>
-                    <button id="adminNavBtn" onclick="openAdminModal()" class="hidden bg-purple-100 hover:bg-purple-200 text-purple-700 px-3.5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> Admin</button>
-                    <button onclick="logout()" class="bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 px-3.5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                    <button id="adminNavBtn" onclick="openAdminModal()" class="hidden bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-800/50 text-purple-700 dark:text-purple-400 px-3.5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> Admin</button>
+                    <button onclick="logout()" class="bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-900/30 text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 px-3.5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
                 </div>
             </div>
-            <div class="md:hidden flex items-center gap-2"><button onclick="openChatModal()" class="px-3 py-2 bg-sky-600 text-white rounded-xl text-sm"><i class="fa-solid fa-comments"></i></button><button onclick="logout()" class="px-3 py-2 bg-slate-100 rounded-xl text-sm"><i class="fa-solid fa-right-from-bracket"></i></button><button onclick="toggleMobileMenu()" class="p-2"><i class="fa-solid fa-bars text-xl"></i></button></div>
+            <div class="md:hidden flex items-center gap-2">
+                <button onclick="toggleDarkMode()" class="p-2 text-slate-500"><i class="fa-solid fa-moon dark:hidden"></i><i class="fa-solid fa-sun hidden dark:block"></i></button>
+                <button onclick="openChatModal()" class="px-3 py-2 bg-sky-600 text-white rounded-xl text-sm"><i class="fa-solid fa-comments"></i></button>
+                <button onclick="toggleMobileMenu()" class="p-2 dark:text-white"><i class="fa-solid fa-bars text-xl"></i></button>
+            </div>
         </div>
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-b px-4 pt-2 pb-4 space-y-2">
-            <a href="#announcements" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50">Announcements</a><a href="#homework" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50">Homework</a><a href="#timetable" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50">Timetable</a><a href="#yearbook" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50">Yearbook</a><a href="#babyphotos" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50">Childhood</a><a href="#wall" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50">Class Wall</a><a href="#ai-tutor" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-purple-600">AI Tutor</a>
-            <button onclick="openChatModal(); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-sky-700 bg-sky-50"><i class="fa-solid fa-comments"></i> Live Chat</button>
-            <div id="mobileAdminContainer" class="pt-2 border-t hidden"><button onclick="openAdminModal(); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-purple-700 bg-purple-50">Admin Panel & Logbook</button></div>
+        <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-slate-900 border-b dark:border-slate-800 px-4 pt-2 pb-4 space-y-2">
+            <a href="#announcements" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Announcements</a>
+            <a href="#homework" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Homework</a>
+            <a href="#projects" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Projects</a>
+            <a href="#ai-tutor" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-lg text-sm text-purple-600 dark:text-purple-400">AI Tutor</a>
+            <button onclick="openChatModal(); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-sky-700 bg-sky-50 dark:bg-sky-900/30 dark:text-sky-400"><i class="fa-solid fa-comments"></i> Live Chat</button>
+            <button onclick="logout()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-slate-800"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
         </div>
     </header>
 
@@ -65,18 +81,46 @@
     </section>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20 flex-grow w-full">
-        <section id="announcements" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-bullhorn text-blue-600"></i> Announcements</h2><p class="text-sm text-slate-500">Important updates</p></div><button onclick="openAddModal('announcement')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-plus"></i> Post</button></div><div id="announcementsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
-        <section id="homework" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-book-bookmark text-indigo-600"></i> Homework</h2><p class="text-sm text-slate-500">Upcoming assignments</p></div><button onclick="openAddModal('homework')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-plus"></i> Add</button></div><div id="homeworkGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
-        <section id="timetable" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-calendar-days text-blue-600"></i> Timetable</h2></div><button onclick="openAddModal('timetable')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-plus"></i> Add</button></div><div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="bg-slate-50 border-b text-xs font-bold text-slate-500 uppercase"><th class="py-4 px-6">Day</th><th class="py-4 px-6">Subject</th><th class="py-4 px-6">Time</th><th class="py-4 px-6 text-right">Actions</th></tr></thead><tbody id="timetableBody" class="divide-y divide-slate-100 text-sm"></tbody></table></div></div></section>
+        <section id="announcements" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2 dark:text-white"><i class="fa-solid fa-bullhorn text-blue-600"></i> Announcements</h2><p class="text-sm text-slate-500 dark:text-slate-400">Important updates</p></div><button onclick="openAddModal('announcement')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-plus"></i> Post</button></div><div id="announcementsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
+        
+        <section id="homework" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2 dark:text-white"><i class="fa-solid fa-book-bookmark text-indigo-600"></i> Homework</h2><p class="text-sm text-slate-500 dark:text-slate-400">Upcoming assignments</p></div><button onclick="openAddModal('homework')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-plus"></i> Add</button></div><div id="homeworkGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
+        
+        <!-- NEW PROJECTS & WORKSHEETS SECTION -->
+        <section id="projects" class="scroll-mt-28">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold flex items-center gap-2 dark:text-white"><i class="fa-solid fa-folder-open text-emerald-600"></i> Projects & Worksheets</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">PowerPoints, Word Docs, and Study Files</p>
+                </div>
+                <button onclick="openAddModal('project')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+            </div>
+            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <section id="timetable" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2 dark:text-white"><i class="fa-solid fa-calendar-days text-blue-600"></i> Timetable</h2></div><button onclick="openAddModal('timetable')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-plus"></i> Add</button></div><div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="bg-slate-50 dark:bg-slate-900 border-b dark:border-slate-700 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase"><th class="py-4 px-6">Day</th><th class="py-4 px-6">Subject</th><th class="py-4 px-6">Time</th><th class="py-4 px-6 text-right">Actions</th></tr></thead><tbody id="timetableBody" class="divide-y divide-slate-100 dark:divide-slate-700 text-sm"></tbody></table></div></div></section>
+        
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <section id="yearbook" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-camera-retro text-amber-600"></i> Yearbook</h2></div><button onclick="openAddModal('yearbook')" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-upload"></i> Upload</button></div><div id="yearbookGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div></section>
-            <section id="babyphotos" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-baby text-pink-600"></i> Childhood</h2></div><button onclick="openAddModal('baby')" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-upload"></i> Upload</button></div><div id="babyGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div></section>
+            <section id="yearbook" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2 dark:text-white"><i class="fa-solid fa-camera-retro text-amber-600"></i> Yearbook</h2></div><button onclick="openAddModal('yearbook')" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-upload"></i> Upload</button></div><div id="yearbookGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div></section>
+            <section id="babyphotos" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2 dark:text-white"><i class="fa-solid fa-baby text-pink-600"></i> Childhood</h2></div><button onclick="openAddModal('baby')" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-upload"></i> Upload</button></div><div id="babyGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div></section>
         </div>
-        <section id="wall" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fa-solid fa-comments text-indigo-600"></i> Class Wall</h2></div><button onclick="openAddModal('wall')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-pen"></i> Post</button></div><div id="wallGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
+        
+        <section id="wall" class="scroll-mt-28"><div class="flex items-center justify-between mb-8"><div><h2 class="text-2xl font-bold flex items-center gap-2 dark:text-white"><i class="fa-solid fa-comments text-indigo-600"></i> Class Wall</h2></div><button onclick="openAddModal('wall')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fa-solid fa-pen"></i> Post</button></div><div id="wallGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
 
         <section id="ai-tutor" class="scroll-mt-28 bg-gradient-to-br from-indigo-900 via-slate-900 to-purple-950 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
             <div class="max-w-3xl mx-auto relative z-10">
                 <div class="text-center mb-10"><span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-400/30 mb-4"><i class="fa-solid fa-sparkles"></i> Powered by Gemini AI</span><h2 class="text-3xl font-bold mb-3">Grade 9C AI Study Buddy</h2><p class="text-slate-300 text-sm">Ask any Math, Science question - REAL AI now!</p></div>
+                
+                <div class="bg-slate-950/60 border border-purple-500/30 rounded-2xl p-6 mb-8 text-center backdrop-blur-sm">
+                    <h3 class="text-lg font-bold mb-2 text-purple-200"><i class="fa-solid fa-clock"></i> Deep Focus Timer</h3>
+                    <p class="text-xs text-slate-400 mb-4">Set un-skippable focus time for your homework.</p>
+                    <div id="timerDisplay" class="text-5xl font-mono font-bold text-white mb-5 tracking-widest drop-shadow-md">25:00</div>
+                    <div class="flex justify-center gap-3">
+                        <button onclick="startFocusTimer()" class="bg-purple-600 hover:bg-purple-500 px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-lg transition"><i class="fa-solid fa-play mr-1"></i> Start</button>
+                        <button onclick="pauseFocusTimer()" class="bg-slate-700 hover:bg-slate-600 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition"><i class="fa-solid fa-pause mr-1"></i> Pause</button>
+                        <button onclick="resetFocusTimer()" class="bg-rose-600/80 hover:bg-rose-500 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition"><i class="fa-solid fa-rotate-right mr-1"></i> Reset</button>
+                    </div>
+                </div>
+
                 <div class="flex justify-center gap-2 mb-6"><button onclick="switchAiTab('chat')" id="aiTabChatBtn" class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-purple-600 text-white shadow">AI Tutor Chat</button><button onclick="switchAiTab('quiz')" id="aiTabQuizBtn" class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-white/10 text-slate-300 hover:bg-white/20">Quiz Generator</button></div>
                 <div id="aiChatPane" class="space-y-4"><div id="aiChatMessages" class="bg-slate-950/50 border border-slate-800 rounded-2xl p-4 h-80 overflow-y-auto space-y-3 text-sm"><div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-200">Hello Grade 9C! I'm your REAL AI tutor. Ask me anything!</div></div></div><form onsubmit="handleAiChat(event)" class="flex gap-2"><input type="text" id="aiChatInput" placeholder="e.g., Explain Newton's Law..." class="flex-grow px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"><button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-6 py-3 rounded-xl text-sm flex items-center gap-2"><i class="fa-solid fa-paper-plane"></i> Ask</button></form></div>
                 <div id="aiQuizPane" class="hidden space-y-4"><div class="bg-slate-950/50 border border-slate-800 rounded-2xl p-6"><h3 class="text-lg font-bold mb-4">Generate Practice Quiz</h3><div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4"><button onclick="generateQuiz('Mathematics')" class="bg-slate-800 hover:bg-purple-600/30 border border-slate-700 p-3 rounded-xl text-sm font-semibold text-left">📐 Mathematics</button><button onclick="generateQuiz('Physics')" class="bg-slate-800 hover:bg-purple-600/30 border border-slate-700 p-3 rounded-xl text-sm font-semibold text-left">⚡ Physics</button><button onclick="generateQuiz('Chemistry')" class="bg-slate-800 hover:bg-purple-600/30 border border-slate-700 p-3 rounded-xl text-sm font-semibold text-left">🧪 Chemistry</button></div><div id="quizOutput" class="text-sm text-slate-300"></div></div></div>
@@ -84,23 +128,23 @@
         </section>
     </main>
 
-    <footer class="bg-white border-t py-8 px-4 mt-auto"><div class="max-w-7xl mx-auto flex justify-between text-sm text-slate-500"><div>© 2026 Smart College • Grade 9C</div><div id="footerUserStatus" class="font-mono text-xs"></div></div></footer>
+    <footer class="bg-white dark:bg-slate-900 border-t dark:border-slate-800 py-8 px-4 mt-auto transition-colors duration-300"><div class="max-w-7xl mx-auto flex justify-between text-sm text-slate-500 dark:text-slate-400"><div>© 2026 Smart College • Grade 9C</div><div id="footerUserStatus" class="font-mono text-xs"></div></div></footer>
 
-    <div id="adminModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-start justify-center p-4 overflow-y-auto overscroll-contain"><div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8 max-h-[90vh] flex flex-col overflow-hidden"><div class="flex items-center justify-between pb-4 border-b mb-6 shrink-0"><div><h3 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-shield-halved text-purple-600"></i> Admin Control & Audit Logbook</h3></div><button onclick="closeAdminModal()" class="text-slate-400 text-lg p-2"><i class="fa-solid fa-xmark"></i></button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 overflow-hidden min-h-0"><div class="bg-slate-50 p-4 rounded-xl border flex flex-col overflow-hidden min-h-0"><h4 class="font-bold text-sm mb-3 shrink-0"><i class="fa-solid fa-key"></i> PIN Manager</h4><form onsubmit="handleAddPin(event)" class="space-y-3 mb-4 shrink-0"><input type="text" id="newPinCode" required placeholder="PIN (e.g., 9c-31)" class="w-full px-3 py-2 rounded-lg border text-sm"><input type="text" id="newPinName" required placeholder="Student Full Name" class="w-full px-3 py-2 rounded-lg border text-sm"><button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg text-xs">Add New PIN</button></form><div id="pinListContainer" class="overflow-y-auto space-y-2 pr-1 flex-1 min-h-[150px]"></div></div><div class="md:col-span-2 bg-slate-50 p-4 rounded-xl border flex flex-col overflow-hidden min-h-0"><div class="flex justify-between mb-3 shrink-0"><h4 class="font-bold text-sm"><i class="fa-solid fa-book-tanakh"></i> Audit Logbook</h4><button onclick="clearLogs()" class="text-xs text-rose-600">Clear</button></div><div id="auditLogContainer" class="overflow-y-auto space-y-2.5 font-mono text-xs flex-1 min-h-[200px] overscroll-contain"></div></div></div></div></div>
-    <div id="addModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4"><div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border"><div class="flex justify-between pb-4 border-b mb-6"><h3 id="modalTitle" class="text-xl font-bold">Add Item</h3><button onclick="closeAddModal()" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button></div><form id="genericAddForm" onsubmit="handleGenericSubmit(event)" class="space-y-4"><div id="modalFormFields"></div><button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl text-sm">Save & Post LIVE</button></form></div></div>
+    <div id="adminModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-start justify-center p-4 overflow-y-auto overscroll-contain"><div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-4xl w-full p-6 my-8 max-h-[90vh] flex flex-col overflow-hidden"><div class="flex items-center justify-between pb-4 border-b dark:border-slate-700 mb-6 shrink-0"><div><h3 class="text-xl font-bold flex items-center gap-2 dark:text-white"><i class="fa-solid fa-shield-halved text-purple-600"></i> Admin Control</h3></div><button onclick="closeAdminModal()" class="text-slate-400 p-2"><i class="fa-solid fa-xmark"></i></button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 overflow-hidden min-h-0"><div class="bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600 flex flex-col overflow-hidden min-h-0"><h4 class="font-bold text-sm mb-3 dark:text-white shrink-0"><i class="fa-solid fa-key"></i> PIN Manager</h4><form onsubmit="handleAddPin(event)" class="space-y-3 mb-4 shrink-0"><input type="text" id="newPinCode" required placeholder="PIN (e.g., 9c-31)" class="w-full px-3 py-2 rounded-lg border dark:border-slate-600 dark:bg-slate-800 dark:text-white text-sm"><input type="text" id="newPinName" required placeholder="Student Full Name" class="w-full px-3 py-2 rounded-lg border dark:border-slate-600 dark:bg-slate-800 dark:text-white text-sm"><button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg text-xs">Add New PIN</button></form><div id="pinListContainer" class="overflow-y-auto space-y-2 pr-1 flex-1 min-h-[150px]"></div></div><div class="md:col-span-2 bg-slate-50 dark:bg-slate-700 p-4 rounded-xl border dark:border-slate-600 flex flex-col overflow-hidden min-h-0"><div class="flex justify-between mb-3 shrink-0"><h4 class="font-bold text-sm dark:text-white"><i class="fa-solid fa-book-tanakh"></i> Audit Logbook</h4><button onclick="clearLogs()" class="text-xs text-rose-600">Clear</button></div><div id="auditLogContainer" class="overflow-y-auto space-y-2.5 font-mono text-xs flex-1 min-h-[200px] overscroll-contain"></div></div></div></div></div>
+    <div id="addModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-4"><div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6 border dark:border-slate-700"><div class="flex justify-between pb-4 border-b dark:border-slate-700 mb-6"><h3 id="modalTitle" class="text-xl font-bold dark:text-white">Add Item</h3><button onclick="closeAddModal()" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button></div><form id="genericAddForm" onsubmit="handleGenericSubmit(event)" class="space-y-4"><div id="modalFormFields"></div><button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl text-sm">Save & Post LIVE</button></form></div></div>
 
     <div id="chatModal" class="fixed inset-0 z-[60] bg-slate-900/80 backdrop-blur-sm hidden items-start justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full my-8 flex flex-col overflow-hidden max-h-[85vh] border">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full my-8 flex flex-col overflow-hidden max-h-[85vh] border dark:border-slate-700 transition-colors">
             <div class="flex items-center justify-between p-4 border-b bg-gradient-to-r from-sky-600 to-blue-600 text-white">
                 <h3 class="font-bold flex items-center gap-2"><i class="fa-solid fa-comments"></i> Grade 9C Live Chat <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">LIVE</span></h3>
                 <button onclick="closeChatModal()" class="text-white/80 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div id="chatMessages" class="p-4 space-y-3 bg-slate-50 flex-1 overflow-y-auto min-h-[400px] max-h-[400px]"></div>
-            <div class="p-3 border-t bg-white flex gap-2">
-                <input id="chatInput" type="text" placeholder="Type a message..." class="flex-1 px-4 py-2.5 rounded-full border border-slate-200 text-sm outline-none focus:border-sky-500 bg-slate-50">
+            <div id="chatMessages" class="p-4 space-y-3 bg-slate-50 dark:bg-slate-900 flex-1 overflow-y-auto min-h-[400px] max-h-[400px]"></div>
+            <div class="p-3 border-t dark:border-slate-700 bg-white dark:bg-slate-800 flex gap-2">
+                <input id="chatInput" type="text" placeholder="Type a message..." class="flex-1 px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm outline-none focus:border-sky-500">
                 <button onclick="sendChatMessage()" class="bg-sky-600 hover:bg-sky-700 text-white w-10 h-10 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-paper-plane text-sm"></i></button>
             </div>
-            <div class="px-4 py-2 bg-slate-50 text-[10px] text-slate-400 border-t text-center">Messages visible to everyone • Logged in Admin Logbook</div>
+            <div class="px-4 py-2 bg-slate-50 dark:bg-slate-900 text-[10px] text-slate-400 border-t dark:border-slate-700 text-center">Messages visible to everyone</div>
         </div>
     </div>
 
@@ -123,13 +167,14 @@ window.initCloudSync = function(){
   const status = document.getElementById('syncStatus');
   if(!db){ status.textContent='● Offline mode'; return; }
   status.textContent='● Live sync active - all phones connected';
-  const collections = ['grade9c_announcements','grade9c_homework','grade9c_timetable','grade9c_yearbook','grade9c_baby','grade9c_wall','grade9c_pins','grade9c_logs','grade9c_chat'];
+  const collections = ['grade9c_announcements','grade9c_homework','grade9c_projects','grade9c_timetable','grade9c_yearbook','grade9c_baby','grade9c_wall','grade9c_pins','grade9c_logs','grade9c_chat'];
   collections.forEach(col => {
     onSnapshot(doc(db, "portal", col), (snap)=>{
       if(snap.exists()){
         localStorage.setItem(col, JSON.stringify(snap.data().data));
         if(col==='grade9c_announcements') { announcements = snap.data().data; renderAnnouncements(); }
         if(col==='grade9c_homework') { homework = snap.data().data; renderHomework(); }
+        if(col==='grade9c_projects') { projects = snap.data().data; renderProjects(); }
         if(col==='grade9c_timetable') { timetable = snap.data().data; renderTimetable(); }
         if(col==='grade9c_yearbook') { yearbook = snap.data().data; renderYearbook(); }
         if(col==='grade9c_baby') { babyPhotos = snap.data().data; renderBabyPhotos(); }
@@ -149,81 +194,121 @@ window.syncToCloud = async function(key, data){
 </script>
 
 <script>
+function toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
+    if (document.documentElement.classList.contains('dark')) { localStorage.setItem('theme', 'dark'); } 
+    else { localStorage.setItem('theme', 'light'); }
+}
+if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+}
+
+let focusTimeLeft = 25 * 60; 
+let focusTimerId = null;
+function updateTimerDisplay() {
+    const m = Math.floor(focusTimeLeft / 60).toString().padStart(2, '0');
+    const s = (focusTimeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').textContent = `${m}:${s}`;
+}
+window.startFocusTimer = function() {
+    if(focusTimerId) return; 
+    focusTimerId = setInterval(() => {
+        if(focusTimeLeft > 0) { focusTimeLeft--; updateTimerDisplay(); } 
+        else { clearInterval(focusTimerId); focusTimerId = null; alert("Deep Focus session complete!"); }
+    }, 1000);
+};
+window.pauseFocusTimer = function() { clearInterval(focusTimerId); focusTimerId = null; };
+window.resetFocusTimer = function() { clearInterval(focusTimerId); focusTimerId = null; focusTimeLeft = 25 * 60; updateTimerDisplay(); };
+
 let studentPins = JSON.parse(localStorage.getItem('grade9c_pins')) || {"overrideadmin9c": { name: "Master Administrator", isAdmin: true },"9c-01": { name: "Ali Hammoud", isAdmin: false }};
 let currentUser = JSON.parse(localStorage.getItem('grade9c_current_user')) || null;
 let auditLogs = JSON.parse(localStorage.getItem('grade9c_logs')) || [{ time: new Date().toLocaleString(), user: "System", action: "Portal initialized" }];
 let announcements = JSON.parse(localStorage.getItem('grade9c_announcements')) || [{ id: 1, title: "Mid-Term Exam Schedule", content: "Check calendar for upcoming exams.", author: "Ali Hammoud", date: "Sep 28, 2026", image: "" }];
 let homework = JSON.parse(localStorage.getItem('grade9c_homework')) || [{ id: 1, subject: "Mathematics", task: "Solve exercises 4 to 10 on page 112.", dueDate: "Oct 2, 2026", author: "Karim Mroueh", image: "" }];
+let projects = JSON.parse(localStorage.getItem('grade9c_projects')) || [{ id: 1, title: "Science Chapter 1 Presentation", type: "powerpoint", url: "#", author: "Ali Hammoud", date: "Oct 2, 2026" }];
 let timetable = JSON.parse(localStorage.getItem('grade9c_timetable')) || [{ id: 1, day: "Monday", subject: "Mathematics", time: "08:00 AM" }];
 let yearbook = JSON.parse(localStorage.getItem('grade9c_yearbook')) || [{ id: 1, name: "Ali Hammoud", url: "https://placehold.co/400x400/2563eb/ffffff?text=Ali" }];
 let babyPhotos = JSON.parse(localStorage.getItem('grade9c_baby')) || [{ id: 1, name: "Fatima Zein", url: "https://placehold.co/400x400/db2777/ffffff?text=Baby" }];
 let wallNotes = JSON.parse(localStorage.getItem('grade9c_wall')) || [{ id: 1, name: "Hassan Fakih", text: "Good luck exams!", time: "Today" }];
 let chatMessagesData = JSON.parse(localStorage.getItem('grade9c_chat')) || [];
 let activeModalType = '';
+
 window.onload = function() {
     if (!currentUser) { document.getElementById('pinModal').classList.remove('hidden'); document.getElementById('pinModal').classList.add('flex'); }
     else { applyLoginState(); }
-    renderAll(); setTimeout(()=>{ if(window.initCloudSync) window.initCloudSync(); }, 500);
+    renderAll(); 
+    setTimeout(()=>{ if(window.initCloudSync) window.initCloudSync(); }, 500);
 };
+
 function handlePinLogin(e){ e.preventDefault(); const pin = document.getElementById('pinInput').value.trim(); const errorEl = document.getElementById('pinError'); if (studentPins[pin]) { currentUser = { pin,...studentPins[pin] }; localStorage.setItem('grade9c_current_user', JSON.stringify(currentUser)); document.getElementById('pinModal').classList.remove('flex'); document.getElementById('pinModal').classList.add('hidden'); logAction(`Logged in as ${currentUser.name}`); applyLoginState(); renderAll(); } else { errorEl.textContent = "Invalid PIN."; errorEl.classList.remove('hidden'); } }
 function logout(){ currentUser = null; localStorage.removeItem('grade9c_current_user'); document.getElementById('pinInput').value = ''; document.getElementById('pinModal').classList.remove('hidden'); document.getElementById('pinModal').classList.add('flex'); applyLoginState(); }
 function applyLoginState(){ if (!currentUser) return; document.getElementById('userInfoBadge').classList.remove('hidden'); document.getElementById('userNameDisplay').textContent = currentUser.name; document.getElementById('userRoleDisplay').textContent = currentUser.isAdmin? "Master Administrator" : "Grade 9C Student"; document.getElementById('footerUserStatus').textContent = `Logged in as: ${currentUser.name}`; if (currentUser.isAdmin) { document.getElementById('adminNavBtn').classList.remove('hidden'); document.getElementById('mobileAdminContainer').classList.remove('hidden'); } else { document.getElementById('adminNavBtn').classList.add('hidden'); document.getElementById('mobileAdminContainer').classList.add('hidden'); } }
 function toggleMobileMenu(){ document.getElementById('mobileMenu').classList.toggle('hidden'); }
 function logAction(actionDesc){ const entry = { time: new Date().toLocaleTimeString() + ' ' + new Date().toLocaleDateString(), user: currentUser? currentUser.name : "Guest", action: actionDesc }; auditLogs.unshift(entry); if(window.syncToCloud) window.syncToCloud('grade9c_logs', auditLogs); else localStorage.setItem('grade9c_logs', JSON.stringify(auditLogs)); }
-function renderAll(){ renderAnnouncements(); renderHomework(); renderTimetable(); renderYearbook(); renderBabyPhotos(); renderWall(); renderAdminPanel(); renderChatMessages(); }
-function renderAnnouncements(){ document.getElementById('announcementsGrid').innerHTML = announcements.map(item => `<div class="bg-white rounded-2xl p-6 border shadow-sm flex flex-col justify-between"><div><div class="flex justify-between mb-3"><span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-600">${item.date}</span>${currentUser? `<button onclick="deleteItem('announcements', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><h3 class="font-bold text-lg mb-2">${item.title}</h3><p class="text-slate-600 text-sm mb-4">${item.content}</p>${item.image? `<img src="${item.image}" class="rounded-xl w-full h-48 object-cover mb-4">` : ''}</div><div class="pt-4 border-t text-xs text-slate-400">Posted by <strong>${item.author}</strong></div></div>`).join(''); }
-function renderHomework(){ document.getElementById('homeworkGrid').innerHTML = homework.map(item => `<div class="bg-white rounded-2xl p-6 border shadow-sm"><div class="flex justify-between mb-3"><span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600">${item.subject}</span>${currentUser? `<button onclick="deleteItem('homework', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><p class="font-medium text-sm mb-4">${item.task}</p>${item.image? `<img src="${item.image}" class="rounded-xl w-full h-48 object-cover mb-4">` : ''}<div class="pt-4 border-t text-xs flex justify-between"><span class="font-semibold text-rose-600">Due: ${item.dueDate}</span><span>By ${item.author}</span></div></div>`).join(''); }
-function renderTimetable(){ document.getElementById('timetableBody').innerHTML = timetable.map(item => `<tr class="hover:bg-slate-50"><td class="py-4 px-6 font-semibold">${item.day}</td><td class="py-4 px-6">${item.subject}</td><td class="py-4 px-6 font-mono text-xs">${item.time}</td><td class="py-4 px-6 text-right">${currentUser? `<button onclick="deleteItem('timetable', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</td></tr>`).join(''); }
-function renderYearbook(){ document.getElementById('yearbookGrid').innerHTML = yearbook.map(item => `<div class="relative group bg-white rounded-2xl overflow-hidden border aspect-square"><img src="${item.url}" class="w-full h-full object-cover group-hover:scale-105 transition"><div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 text-white"><p class="font-bold text-sm">${item.name}</p>${currentUser? `<button onclick="deleteItem('yearbook', ${item.id})" class="text-xs text-rose-300 mt-1 text-left">Delete</button>` : ''}</div></div>`).join(''); }
-function renderBabyPhotos(){ document.getElementById('babyGrid').innerHTML = babyPhotos.map(item => `<div class="relative group bg-white rounded-2xl overflow-hidden border aspect-square"><img src="${item.url}" class="w-full h-full object-cover group-hover:scale-105 transition"><div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 text-white"><p class="font-bold text-sm">Baby: ${item.name}</p>${currentUser? `<button onclick="deleteItem('baby', ${item.id})" class="text-xs text-rose-300 mt-1 text-left">Delete</button>` : ''}</div></div>`).join(''); }
-function renderWall(){ document.getElementById('wallGrid').innerHTML = wallNotes.map(item => `<div class="bg-white rounded-2xl p-6 border shadow-sm"><div class="flex justify-between mb-3"><span class="font-bold text-sm">${item.name}</span>${currentUser? `<button onclick="deleteItem('wall', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><p class="text-slate-600 text-sm">${item.text}</p><div class="pt-4 border-t text-[10px] text-slate-400">${item.time}</div></div>`).join(''); }
-function renderAdminPanel(){ document.getElementById('pinListContainer').innerHTML = Object.entries(studentPins).map(([pin, data]) => `<div class="bg-white p-2.5 rounded-lg border flex justify-between text-xs"><div><span class="font-mono font-bold text-purple-700">${pin}</span><div class="text-slate-600">${data.name}</div></div>${pin!== 'overrideadmin9c'? `<button onclick="deletePin('${pin}')" class="text-rose-500">Remove</button>` : '<span class="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded">Admin</span>'}</div>`).join(''); document.getElementById('auditLogContainer').innerHTML = auditLogs.map(log => `<div class="p-2 bg-white rounded border"><div class="text-[10px] text-slate-400">${log.time} - <strong class="text-purple-600">${log.user}</strong></div><div class="text-slate-700 mt-0.5">${log.action}</div></div>`).join(''); }
-function renderChatMessages(){
-    const box = document.getElementById('chatMessages');
-    if(!box) return;
-    if(chatMessagesData.length===0){
-        box.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm"><i class="fa-solid fa-comments text-2xl mb-2 block"></i>No messages yet. Be first to say hi! 👋</div>`;
-        return;
-    }
-    box.innerHTML = chatMessagesData.map(m => {
-        const isMe = currentUser && m.pin === currentUser.pin;
-        return `<div class="flex flex-col ${isMe? 'items-end' : 'items-start'}">
-            <div class="max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${isMe? 'bg-sky-600 text-white rounded-br-sm' : 'bg-white border shadow-sm rounded-bl-sm'}">
-                <div class="font-bold text-[11px] ${isMe? 'text-white/70' : 'text-sky-600'} mb-0.5">${m.name.replace(/</g,'&lt;')} ${isMe? '(You)' : ''}</div>
-                <div class="leading-snug">${m.text.replace(/</g,'&lt;')}</div>
-                <div class="text-[10px] opacity-60 mt-1">${m.timeStr || ''}</div>
-            </div>
-        </div>`;
-    }).join('');
-    box.scrollTop = box.scrollHeight;
-}
-async function sendChatMessage(){
-    const input = document.getElementById('chatInput');
-    const text = input.value.trim();
-    if(!text) return;
-    if(!currentUser){ alert('Login first'); return; }
-    const msg = { id: Date.now(), name: currentUser.name, pin: currentUser.pin, text: text, time: Date.now(), timeStr: new Date().toLocaleTimeString() };
-    chatMessagesData.push(msg);
-    if(chatMessagesData.length>200) chatMessagesData = chatMessagesData.slice(-200);
-    await window.syncToCloud('grade9c_chat', chatMessagesData);
-    logAction(`Sent LIVE CHAT: "${text}" | Name: ${currentUser.name} | PIN: ${currentUser.pin}`);
-    input.value = '';
-    renderChatMessages();
-}
+
+function renderAll(){ renderAnnouncements(); renderHomework(); renderProjects(); renderTimetable(); renderYearbook(); renderBabyPhotos(); renderWall(); renderAdminPanel(); renderChatMessages(); }
+
+function renderAnnouncements(){ document.getElementById('announcementsGrid').innerHTML = announcements.map(item => `<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border dark:border-slate-700 shadow-sm flex flex-col justify-between"><div><div class="flex justify-between mb-3"><span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">${item.date}</span>${currentUser? `<button onclick="deleteItem('announcements', ${item.id})" class="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><h3 class="font-bold text-lg mb-2 dark:text-white">${item.title}</h3><p class="text-slate-600 dark:text-slate-300 text-sm mb-4">${item.content}</p>${item.image? `<img src="${item.image}" class="rounded-xl w-full h-48 object-cover mb-4">` : ''}</div><div class="pt-4 border-t dark:border-slate-700 text-xs text-slate-400">Posted by <strong class="dark:text-slate-300">${item.author}</strong></div></div>`).join(''); }
+
+function renderHomework(){ document.getElementById('homeworkGrid').innerHTML = homework.map(item => `<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border dark:border-slate-700 shadow-sm"><div class="flex justify-between mb-3"><span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400">${item.subject}</span>${currentUser? `<button onclick="deleteItem('homework', ${item.id})" class="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><p class="font-medium text-sm mb-4 dark:text-white">${item.task}</p>${item.image? `<img src="${item.image}" class="rounded-xl w-full h-48 object-cover mb-4">` : ''}<div class="pt-4 border-t dark:border-slate-700 text-xs flex justify-between"><span class="font-semibold text-rose-600 dark:text-rose-400">Due: ${item.dueDate}</span><span class="dark:text-slate-400">By ${item.author}</span></div></div>`).join(''); }
+
+function renderProjects(){ document.getElementById('projectsGrid').innerHTML = projects.map(item => {
+    let icon = item.type === 'powerpoint' ? '<i class="fa-solid fa-file-powerpoint text-orange-500 text-3xl"></i>' : '<i class="fa-solid fa-file-word text-blue-500 text-3xl"></i>';
+    return `<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border dark:border-slate-700 shadow-sm flex items-start gap-4"><div class="shrink-0 mt-1">${icon}</div><div class="flex-grow overflow-hidden"><div class="flex justify-between items-start mb-1"><h3 class="font-bold text-sm dark:text-white truncate" title="${item.title}">${item.title}</h3>${currentUser ? `<button onclick="deleteItem('projects', ${item.id})" class="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 text-xs shrink-0 ml-2"><i class="fa-solid fa-trash"></i></button>` : ''}</div><p class="text-xs text-slate-500 dark:text-slate-400 mb-3">By ${item.author} • ${item.date}</p><a href="${item.url}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"><i class="fa-solid fa-download"></i> Open / Download</a></div></div>`;
+}).join(''); }
+
+function renderTimetable(){ document.getElementById('timetableBody').innerHTML = timetable.map(item => `<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 dark:text-slate-200"><td class="py-4 px-6 font-semibold">${item.day}</td><td class="py-4 px-6">${item.subject}</td><td class="py-4 px-6 font-mono text-xs">${item.time}</td><td class="py-4 px-6 text-right">${currentUser? `<button onclick="deleteItem('timetable', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</td></tr>`).join(''); }
+function renderYearbook(){ document.getElementById('yearbookGrid').innerHTML = yearbook.map(item => `<div class="relative group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border dark:border-slate-700 aspect-square"><img src="${item.url}" class="w-full h-full object-cover group-hover:scale-105 transition"><div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 text-white"><p class="font-bold text-sm">${item.name}</p>${currentUser? `<button onclick="deleteItem('yearbook', ${item.id})" class="text-xs text-rose-300 mt-1 text-left">Delete</button>` : ''}</div></div>`).join(''); }
+function renderBabyPhotos(){ document.getElementById('babyGrid').innerHTML = babyPhotos.map(item => `<div class="relative group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border dark:border-slate-700 aspect-square"><img src="${item.url}" class="w-full h-full object-cover group-hover:scale-105 transition"><div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 text-white"><p class="font-bold text-sm">Baby: ${item.name}</p>${currentUser? `<button onclick="deleteItem('baby', ${item.id})" class="text-xs text-rose-300 mt-1 text-left">Delete</button>` : ''}</div></div>`).join(''); }
+function renderWall(){ document.getElementById('wallGrid').innerHTML = wallNotes.map(item => `<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border dark:border-slate-700 shadow-sm"><div class="flex justify-between mb-3"><span class="font-bold text-sm dark:text-white">${item.name}</span>${currentUser? `<button onclick="deleteItem('wall', ${item.id})" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash"></i></button>` : ''}</div><p class="text-slate-600 dark:text-slate-300 text-sm">${item.text}</p><div class="pt-4 border-t dark:border-slate-700 text-[10px] text-slate-400 mt-4">${item.time}</div></div>`).join(''); }
+
+function renderAdminPanel(){ document.getElementById('pinListContainer').innerHTML = Object.entries(studentPins).map(([pin, data]) => `<div class="bg-white dark:bg-slate-800 p-2.5 rounded-lg border dark:border-slate-600 flex justify-between text-xs"><div><span class="font-mono font-bold text-purple-700 dark:text-purple-400">${pin}</span><div class="text-slate-600 dark:text-slate-300">${data.name}</div></div>${pin!== 'overrideadmin9c'? `<button onclick="deletePin('${pin}')" class="text-rose-500">Remove</button>` : '<span class="text-[10px] bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded">Admin</span>'}</div>`).join(''); document.getElementById('auditLogContainer').innerHTML = auditLogs.map(log => `<div class="p-2 bg-white dark:bg-slate-800 rounded border dark:border-slate-600"><div class="text-[10px] text-slate-400">${log.time} - <strong class="text-purple-600 dark:text-purple-400">${log.user}</strong></div><div class="text-slate-700 dark:text-slate-300 mt-0.5">${log.action}</div></div>`).join(''); }
+function renderChatMessages(){ const box = document.getElementById('chatMessages'); if(!box) return; if(chatMessagesData.length===0){ box.innerHTML = `<div class="text-center py-12 text-slate-400 dark:text-slate-500 text-sm"><i class="fa-solid fa-comments text-2xl mb-2 block"></i>No messages yet. Be first to say hi! 👋</div>`; return; } box.innerHTML = chatMessagesData.map(m => { const isMe = currentUser && m.pin === currentUser.pin; return `<div class="flex flex-col ${isMe? 'items-end' : 'items-start'}"><div class="max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${isMe? 'bg-sky-600 text-white rounded-br-sm' : 'bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm rounded-bl-sm dark:text-white'}"><div class="font-bold text-[11px] ${isMe? 'text-white/70' : 'text-sky-600 dark:text-sky-400'} mb-0.5">${m.name.replace(/</g,'&lt;')} ${isMe? '(You)' : ''}</div><div class="leading-snug">${m.text.replace(/</g,'&lt;')}</div><div class="text-[10px] opacity-60 mt-1">${m.timeStr || ''}</div></div></div>`; }).join(''); box.scrollTop = box.scrollHeight; }
+
+async function sendChatMessage(){ const input = document.getElementById('chatInput'); const text = input.value.trim(); if(!text) return; if(!currentUser){ alert('Login first'); return; } const msg = { id: Date.now(), name: currentUser.name, pin: currentUser.pin, text: text, time: Date.now(), timeStr: new Date().toLocaleTimeString() }; chatMessagesData.push(msg); if(chatMessagesData.length>200) chatMessagesData = chatMessagesData.slice(-200); await window.syncToCloud('grade9c_chat', chatMessagesData); logAction(`Sent LIVE CHAT: "${text}" | Name: ${currentUser.name}`); input.value = ''; renderChatMessages(); }
 function openChatModal(){ document.getElementById('chatModal').classList.remove('hidden'); document.getElementById('chatModal').classList.add('flex'); document.body.style.overflow='hidden'; renderChatMessages(); }
 function closeChatModal(){ document.getElementById('chatModal').classList.add('hidden'); document.getElementById('chatModal').classList.remove('flex'); document.body.style.overflow=''; }
 document.addEventListener('DOMContentLoaded', ()=>{ document.getElementById('chatInput')?.addEventListener('keypress', (e)=>{ if(e.key==='Enter') sendChatMessage(); }); });
 
-function openAddModal(type){ activeModalType = type; document.getElementById('addModal').classList.remove('hidden'); document.getElementById('addModal').classList.add('flex'); const title = document.getElementById('modalTitle'); const fields = document.getElementById('modalFormFields'); if (type === 'announcement') { title.textContent = "Post Announcement"; fields.innerHTML = `<input type="text" id="annTitle" required placeholder="Title" class="w-full px-4 py-2.5 rounded-xl border text-sm"><textarea id="annContent" required placeholder="Details..." rows="3" class="w-full px-4 py-2.5 rounded-xl border text-sm"></textarea><input type="url" id="annImage" placeholder="Image URL (optional)" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; } else if (type === 'homework') { title.textContent = "Add Homework"; fields.innerHTML = `<input type="text" id="hwSubject" required placeholder="Subject" class="w-full px-4 py-2.5 rounded-xl border text-sm"><textarea id="hwTask" required placeholder="Task..." rows="3" class="w-full px-4 py-2.5 rounded-xl border text-sm"></textarea><input type="text" id="hwDue" required placeholder="Due Date" class="w-full px-4 py-2.5 rounded-xl border text-sm"><input type="url" id="hwImage" placeholder="Image URL (optional)" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; } else if (type === 'timetable') { title.textContent = "Add Period"; fields.innerHTML = `<select id="ttDay" class="w-full px-4 py-2.5 rounded-xl border text-sm"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select><input type="text" id="ttSubject" required placeholder="Subject" class="w-full px-4 py-2.5 rounded-xl border text-sm"><input type="text" id="ttTime" required placeholder="Time" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; } else if (type === 'yearbook') { title.textContent = "Upload Portrait"; fields.innerHTML = `<input type="text" id="ybName" required placeholder="Student Name" class="w-full px-4 py-2.5 rounded-xl border text-sm"><input type="url" id="ybUrl" required placeholder="Photo URL" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; } else if (type === 'baby') { title.textContent = "Upload Childhood Photo"; fields.innerHTML = `<input type="text" id="babyName" required placeholder="Student Name" class="w-full px-4 py-2.5 rounded-xl border text-sm"><input type="url" id="babyUrl" required placeholder="Photo URL" class="w-full px-4 py-2.5 rounded-xl border text-sm">`; } else if (type === 'wall') { title.textContent = "Post Note"; fields.innerHTML = `<textarea id="wallText" required placeholder="Write note..." rows="3" class="w-full px-4 py-2.5 rounded-xl border text-sm"></textarea>`; } }
+function openAddModal(type){ activeModalType = type; document.getElementById('addModal').classList.remove('hidden'); document.getElementById('addModal').classList.add('flex'); const title = document.getElementById('modalTitle'); const fields = document.getElementById('modalFormFields'); const inputClasses = "w-full px-4 py-2.5 rounded-xl border dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm"; 
+    if (type === 'announcement') { title.textContent = "Post Announcement"; fields.innerHTML = `<input type="text" id="annTitle" required placeholder="Title" class="${inputClasses}"><textarea id="annContent" required placeholder="Details..." rows="3" class="${inputClasses}"></textarea><input type="url" id="annImage" placeholder="Image URL (optional)" class="${inputClasses}">`; } 
+    else if (type === 'homework') { title.textContent = "Add Homework"; fields.innerHTML = `<input type="text" id="hwSubject" required placeholder="Subject" class="${inputClasses}"><textarea id="hwTask" required placeholder="Task..." rows="3" class="${inputClasses}"></textarea><input type="text" id="hwDue" required placeholder="Due Date" class="${inputClasses}"><input type="url" id="hwImage" placeholder="Image URL (optional)" class="${inputClasses}">`; } 
+    else if (type === 'project') { title.textContent = "Upload Project/Worksheet"; fields.innerHTML = `<input type="text" id="projTitle" required placeholder="Document Title (e.g. Science Chapter 1)" class="${inputClasses}"><select id="projType" class="${inputClasses}"><option value="word">Word Document (.docx)</option><option value="powerpoint">PowerPoint (.pptx)</option></select><input type="url" id="projUrl" required placeholder="Link to file (Google Drive, OneDrive, etc.)" class="${inputClasses}"><p class="text-[10px] text-slate-500">Upload your file to Google Drive/Dropbox first, then paste the sharing link here.</p>`; }
+    else if (type === 'timetable') { title.textContent = "Add Period"; fields.innerHTML = `<select id="ttDay" class="${inputClasses}"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select><input type="text" id="ttSubject" required placeholder="Subject" class="${inputClasses}"><input type="text" id="ttTime" required placeholder="Time" class="${inputClasses}">`; } 
+    else if (type === 'yearbook') { title.textContent = "Upload Portrait"; fields.innerHTML = `<input type="text" id="ybName" required placeholder="Student Name" class="${inputClasses}"><input type="url" id="ybUrl" required placeholder="Photo URL" class="${inputClasses}">`; } 
+    else if (type === 'baby') { title.textContent = "Upload Childhood Photo"; fields.innerHTML = `<input type="text" id="babyName" required placeholder="Student Name" class="${inputClasses}"><input type="url" id="babyUrl" required placeholder="Photo URL" class="${inputClasses}">`; } 
+    else if (type === 'wall') { title.textContent = "Post Note"; fields.innerHTML = `<textarea id="wallText" required placeholder="Write note..." rows="3" class="${inputClasses}"></textarea>`; } 
+}
 function closeAddModal(){ document.getElementById('addModal').classList.remove('flex'); document.getElementById('addModal').classList.add('hidden'); }
-async function handleGenericSubmit(e){ e.preventDefault(); const id = Date.now(); const author = currentUser? currentUser.name : "Student"; if (activeModalType === 'announcement') { const title = document.getElementById('annTitle').value; const content = document.getElementById('annContent').value; const image = document.getElementById('annImage').value; announcements.unshift({ id, title, content, author, date: new Date().toLocaleDateString(), image }); await window.syncToCloud('grade9c_announcements', announcements); logAction(`Posted announcement: "${title}"`); } else if (activeModalType === 'homework') { const subject = document.getElementById('hwSubject').value; const task = document.getElementById('hwTask').value; const dueDate = document.getElementById('hwDue').value; const image = document.getElementById('hwImage').value; homework.unshift({ id, subject, task, dueDate, author, image }); await window.syncToCloud('grade9c_homework', homework); logAction(`Added homework for ${subject}`); } else if (activeModalType === 'timetable') { const day = document.getElementById('ttDay').value; const subject = document.getElementById('ttSubject').value; const time = document.getElementById('ttTime').value; timetable.push({ id, day, subject, time }); await window.syncToCloud('grade9c_timetable', timetable); logAction(`Added timetable: ${subject}`); } else if (activeModalType === 'yearbook') { const name = document.getElementById('ybName').value; const url = document.getElementById('ybUrl').value; yearbook.push({ id, name, url }); await window.syncToCloud('grade9c_yearbook', yearbook); logAction(`Uploaded portrait for ${name}`); } else if (activeModalType === 'baby') { const name = document.getElementById('babyName').value; const url = document.getElementById('babyUrl').value; babyPhotos.push({ id, name, url }); await window.syncToCloud('grade9c_baby', babyPhotos); logAction(`Uploaded childhood photo for ${name}`); } else if (activeModalType === 'wall') { const text = document.getElementById('wallText').value; wallNotes.unshift({ id, name: author, text, timestamp: Date.now(), time: "Just now" }); await window.syncToCloud('grade9c_wall', wallNotes); logAction(`Posted note to Class Wall`); } closeAddModal(); renderAll(); }
-async function deleteItem(type, id){ if (type === 'announcements') { announcements = announcements.filter(i => i.id!== id); await window.syncToCloud('grade9c_announcements', announcements); } else if (type === 'homework') { homework = homework.filter(i => i.id!== id); await window.syncToCloud('grade9c_homework', homework); } else if (type === 'timetable') { timetable = timetable.filter(i => i.id!== id); await window.syncToCloud('grade9c_timetable', timetable); } else if (type === 'yearbook') { yearbook = yearbook.filter(i => i.id!== id); await window.syncToCloud('grade9c_yearbook', yearbook); } else if (type === 'baby') { babyPhotos = babyPhotos.filter(i => i.id!== id); await window.syncToCloud('grade9c_baby', babyPhotos); } else if (type === 'wall') { wallNotes = wallNotes.filter(i => i.id!== id); await window.syncToCloud('grade9c_wall', wallNotes); } logAction(`Deleted item from ${type}`); renderAll(); }
+
+async function handleGenericSubmit(e){ e.preventDefault(); const id = Date.now(); const author = currentUser? currentUser.name : "Student"; 
+    if (activeModalType === 'announcement') { const title = document.getElementById('annTitle').value; const content = document.getElementById('annContent').value; const image = document.getElementById('annImage').value; announcements.unshift({ id, title, content, author, date: new Date().toLocaleDateString(), image }); await window.syncToCloud('grade9c_announcements', announcements); logAction(`Posted announcement: "${title}"`); } 
+    else if (activeModalType === 'homework') { const subject = document.getElementById('hwSubject').value; const task = document.getElementById('hwTask').value; const dueDate = document.getElementById('hwDue').value; const image = document.getElementById('hwImage').value; homework.unshift({ id, subject, task, dueDate, author, image }); await window.syncToCloud('grade9c_homework', homework); logAction(`Added homework for ${subject}`); } 
+    else if (activeModalType === 'project') { const title = document.getElementById('projTitle').value; const type = document.getElementById('projType').value; const url = document.getElementById('projUrl').value; projects.unshift({ id, title, type, url, author, date: new Date().toLocaleDateString() }); await window.syncToCloud('grade9c_projects', projects); logAction(`Uploaded project: ${title}`); }
+    else if (activeModalType === 'timetable') { const day = document.getElementById('ttDay').value; const subject = document.getElementById('ttSubject').value; const time = document.getElementById('ttTime').value; timetable.push({ id, day, subject, time }); await window.syncToCloud('grade9c_timetable', timetable); logAction(`Added timetable: ${subject}`); } 
+    else if (activeModalType === 'yearbook') { const name = document.getElementById('ybName').value; const url = document.getElementById('ybUrl').value; yearbook.push({ id, name, url }); await window.syncToCloud('grade9c_yearbook', yearbook); logAction(`Uploaded portrait for ${name}`); } 
+    else if (activeModalType === 'baby') { const name = document.getElementById('babyName').value; const url = document.getElementById('babyUrl').value; babyPhotos.push({ id, name, url }); await window.syncToCloud('grade9c_baby', babyPhotos); logAction(`Uploaded childhood photo for ${name}`); } 
+    else if (activeModalType === 'wall') { const text = document.getElementById('wallText').value; wallNotes.unshift({ id, name: author, text, timestamp: Date.now(), time: "Just now" }); await window.syncToCloud('grade9c_wall', wallNotes); logAction(`Posted note to Class Wall`); } 
+    closeAddModal(); renderAll(); 
+}
+async function deleteItem(type, id){ 
+    if (type === 'announcements') { announcements = announcements.filter(i => i.id!== id); await window.syncToCloud('grade9c_announcements', announcements); } 
+    else if (type === 'homework') { homework = homework.filter(i => i.id!== id); await window.syncToCloud('grade9c_homework', homework); } 
+    else if (type === 'projects') { projects = projects.filter(i => i.id!== id); await window.syncToCloud('grade9c_projects', projects); }
+    else if (type === 'timetable') { timetable = timetable.filter(i => i.id!== id); await window.syncToCloud('grade9c_timetable', timetable); } 
+    else if (type === 'yearbook') { yearbook = yearbook.filter(i => i.id!== id); await window.syncToCloud('grade9c_yearbook', yearbook); } 
+    else if (type === 'baby') { babyPhotos = babyPhotos.filter(i => i.id!== id); await window.syncToCloud('grade9c_baby', babyPhotos); } 
+    else if (type === 'wall') { wallNotes = wallNotes.filter(i => i.id!== id); await window.syncToCloud('grade9c_wall', wallNotes); } 
+    logAction(`Deleted item from ${type}`); renderAll(); 
+}
 function openAdminModal(){ if (!currentUser ||!currentUser.isAdmin) { alert("Only Admin can access"); return; } document.getElementById('adminModal').classList.remove('hidden'); document.getElementById('adminModal').classList.add('flex'); renderAdminPanel(); }
 function closeAdminModal(){ document.getElementById('adminModal').classList.remove('flex'); document.getElementById('adminModal').classList.add('hidden'); }
 async function handleAddPin(e){ e.preventDefault(); const pin = document.getElementById('newPinCode').value.trim(); const name = document.getElementById('newPinName').value.trim(); if (studentPins[pin]) { alert("PIN exists!"); return; } studentPins[pin] = { name, isAdmin: false }; await window.syncToCloud('grade9c_pins', studentPins); logAction(`Created PIN for ${name}`); document.getElementById('newPinCode').value = ''; document.getElementById('newPinName').value = ''; renderAdminPanel(); }
 async function deletePin(pin){ delete studentPins[pin]; await window.syncToCloud('grade9c_pins', studentPins); logAction(`Removed PIN: ${pin}`); renderAdminPanel(); }
 async function clearLogs(){ auditLogs = []; await window.syncToCloud('grade9c_logs', auditLogs); renderAdminPanel(); }
+
 function switchAiTab(tab){ const chatPane = document.getElementById('aiChatPane'); const quizPane = document.getElementById('aiQuizPane'); const chatBtn = document.getElementById('aiTabChatBtn'); const quizBtn = document.getElementById('aiTabQuizBtn'); if (tab === 'chat') { chatPane.classList.remove('hidden'); quizPane.classList.add('hidden'); chatBtn.className = "px-5 py-2.5 rounded-xl text-sm font-semibold bg-purple-600 text-white shadow"; quizBtn.className = "px-5 py-2.5 rounded-xl text-sm font-semibold bg-white/10 text-slate-300 hover:bg-white/20"; } else { chatPane.classList.add('hidden'); quizPane.classList.remove('hidden'); quizBtn.className = "px-5 py-2.5 rounded-xl text-sm font-semibold bg-purple-600 text-white shadow"; chatBtn.className = "px-5 py-2.5 rounded-xl text-sm font-semibold bg-white/10 text-slate-300 hover:bg-white/20"; } }
+
 async function handleAiChat(e) {
     e.preventDefault();
     const inputEl = document.getElementById('aiChatInput');
@@ -236,8 +321,8 @@ async function handleAiChat(e) {
     chatMessages.innerHTML += `<div id="${loadingId}" class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-robot text-xs"></i></div><div class="bg-slate-800 p-3 rounded-2xl rounded-tl-none text-slate-300 animate-pulse">Thinking...</div></div>`;
     chatMessages.scrollTop = chatMessages.scrollHeight;
     try {
-        const GEMINI_API_KEY = "AQ.Ab8RN6ItKU0iB_a-FeFJptB3ily9oeVwyt_KMmPqZ0oljFoR-A";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const GEMINI_API_KEY = "AQ.Ab8RN6I6fvjzOXaRSDjxSSUvvTA8OGAmxsnajbhOybC83Qzzpw";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -257,12 +342,13 @@ async function handleAiChat(e) {
     }
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
+
 async function generateQuiz(subject) {
     const outputEl = document.getElementById('quizOutput');
     outputEl.innerHTML = `<div class="text-purple-300 animate-pulse py-4">Generating 3-question quiz for ${subject}...</div>`;
     try {
-        const GEMINI_API_KEY = "AQ.Ab8RN6ItKU0iB_a-FeFJptB3ily9oeVwyt_KMmPqZ0oljFoR-A";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const GEMINI_API_KEY = "AQ.Ab8RN6I6fvjzOXaRSDjxSSUvvTA8OGAmxsnajbhOybC83Qzzpw";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -275,9 +361,7 @@ async function generateQuiz(subject) {
         if(result.error) throw new Error(result.error.message);
         const reply = result.candidates?.[0]?.content?.parts?.[0]?.text || "Could not generate quiz.";
         outputEl.innerHTML = `<div class="space-y-4 pt-2 whitespace-pre-wrap">${reply}</div>`;
-    } catch (err) {
-        outputEl.innerHTML = `<div class="text-rose-400">Failed: ${err.message}</div>`;
-    }
+    } catch (err) { outputEl.innerHTML = `<div class="text-rose-400">Failed: ${err.message}</div>`; }
 }
 </script>
 </body>
